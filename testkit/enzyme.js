@@ -50,6 +50,7 @@ export const carouselTestkitFactory = enzymeTestkitFactoryCreator(load('../src/C
 export const checkboxTestkitFactory = enzymeTestkitFactoryCreator(load('../src/Checkbox/Checkbox.driver'));
 export const circularProgressBarTestkitFactory = enzymeTestkitFactoryCreator(load('../src/CircularProgressBar/CircularProgressBar.driver'));
 export const closeButtonTestkitFactory = enzymeUniTestkitFactoryCreator(load('../src/CloseButton/CloseButton.driver'));
+export const colorInputTestkitFactory = enzymeUniTestkitFactoryCreator(load('../src/ColorInput/ColorInput.driver'));
 export const colorPickerTestkitFactory = enzymeTestkitFactoryCreator(load('../src/ColorPicker/ColorPicker.driver'));
 export const contactItemBuilderTestkitFactory = enzymeTestkitFactoryCreator(load('../src/ContactItemBuilder/ContactItemBuilder.driver'));
 export const counterBadgeTestkitFactory = enzymeTestkitFactoryCreator(load('../src/CounterBadge/CounterBadge.driver'));

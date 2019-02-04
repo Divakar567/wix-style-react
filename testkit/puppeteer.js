@@ -123,9 +123,13 @@ export const richTextInputAreaTestkitFactory = puppeteerUniTestkitFactoryCreator
   richTextInputAreaDriverFactory,
 );
 
-
 import { floatingNotificationDriverFactory } from '../src/FloatingNotification/FloatingNotification.driver';
 
 export const floatingNotificationTestkitFactory = puppeteerUniTestkitFactoryCreator(
   floatingNotificationDriverFactory,
+);
+import { colorInputDriverFactory } from '../src/ColorInput/ColorInput.driver';
+
+export const colorInputTestkitFactory = puppeteerUniTestkitFactoryCreator(
+  colorInputDriverFactory,
 );

@@ -414,3 +414,8 @@ import { floatingNotificationDriverFactory } from '../src/FloatingNotification/F
 export const floatingNotificationTestkitFactory = protractorUniTestkitFactoryCreator(
   floatingNotificationDriverFactory,
 );
+import { colorInputDriverFactory } from '../src/ColorInput/ColorInput.driver';
+
+export const colorInputTestkitFactory = protractorUniTestkitFactoryCreator(
+  colorInputDriverFactory,
+);

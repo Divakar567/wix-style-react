@@ -50,6 +50,7 @@ export const carouselTestkitFactory = testkitFactoryCreator(load('../src/Carouse
 export const checkboxTestkitFactory = testkitFactoryCreator(load('../src/Checkbox/Checkbox.driver'));
 export const circularProgressBarTestkitFactory = testkitFactoryCreator(load('../src/CircularProgressBar/CircularProgressBar.driver'));
 export const closeButtonTestkitFactory = uniTestkitFactoryCreator(load('../src/CloseButton/CloseButton.driver'));
+export const colorInputTestkitFactory = uniTestkitFactoryCreator(load('../src/ColorInput/ColorInput.driver'));
 export const colorPickerTestkitFactory = testkitFactoryCreator(load('../src/ColorPicker/ColorPicker.driver'));
 export const contactItemBuilderTestkitFactory = testkitFactoryCreator(load('../src/ContactItemBuilder/ContactItemBuilder.driver'));
 export const counterBadgeTestkitFactory = testkitFactoryCreator(load('../src/CounterBadge/CounterBadge.driver'));
