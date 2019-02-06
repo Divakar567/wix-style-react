@@ -46,6 +46,12 @@ describe('ColorInput', () => {
       expect((await inputDriver()).hasPrefix()).toBe(true);
     });
 
+    it(`should be visible when input is focus`, async () => {
+      const { inputDriver } = createDriver(<ColorInput />);
+      (await inputDriver()).focus();
+      expect((await inputDriver()).hasPrefix()).toBe(true);
+    });
+
     it(`should be visible when value is present but input is blurred`, async () => {
       const { inputDriver } = createDriver(<ColorInput />);
       (await inputDriver()).click();

@@ -49,6 +49,7 @@ class ColorInput extends React.PureComponent {
           dataHook="colorinput-input"
           onChange={this._onChange}
           onInputClicked={this._onClick}
+          onFocus={this._onClick}
           onBlur={this._onBlur}
           disabled={disabled}
           value={value}
