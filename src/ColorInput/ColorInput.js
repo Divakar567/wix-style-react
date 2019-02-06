@@ -1,26 +1,52 @@
 import React from 'react';
-import styles from './ColorInput.st.css';
+import { node } from 'prop-types';
 import Input from '../Input';
+import styles from './ColorInput.st.css';
 
+const Hash = () => <div className={styles.hash}>#</div>;
 class ColorInput extends React.PureComponent {
   static displayName = 'ColorInput';
 
-  state = {
-    value: '',
+  static propTypes = {
+    placeholder: node,
   };
 
-  _onInputClicked = evt => {
-    this.setState({ value: '#' });
+  static defaultProps = {
+    placeholder: 'Please choose a color',
+  };
+
+  state = {
+    value: '',
+    clicked: false,
+  };
+
+  _onChange = evt => {
+    const value = evt.target.value.replace(/[^0-9A-F]/gi, '');
+    this.setState({ value });
+  };
+
+  _onClick = () => {
+    this.setState({ clicked: true });
+  };
+
+  _onBlur = () => {
+    this.setState({ clicked: false });
   };
 
   render() {
-    const { dataHook, disabled } = this.props;
-    const { value } = this.state;
+    const { dataHook, disabled, placeholder } = this.props;
+    const { value, clicked } = this.state;
+    const prefix = clicked || value ? <Hash /> : undefined;
+    const placeHolder = !clicked ? placeholder : undefined;
     return (
-      <div className={styles} data-hook={dataHook}>
+      <div {...styles('root')} data-hook={dataHook}>
         <Input
+          prefix={prefix}
+          placeholder={placeHolder}
           dataHook="colorinput-input"
-          onInputClicked={this._onInputClicked}
+          onChange={this._onChange}
+          onInputClicked={this._onClick}
+          onBlur={this._onBlur}
           disabled={disabled}
           value={value}
         />
