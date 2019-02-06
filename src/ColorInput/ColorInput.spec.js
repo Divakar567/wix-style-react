@@ -40,7 +40,7 @@ describe('ColorInput', () => {
       expect((await inputDriver()).hasPrefix()).toBe(false);
     });
 
-    it(`should display when input clicked`, async () => {
+    it(`should be visible when input clicked`, async () => {
       const { inputDriver } = createDriver(<ColorInput />);
       (await inputDriver()).click();
       expect((await inputDriver()).hasPrefix()).toBe(true);
@@ -64,6 +64,7 @@ describe('ColorInput', () => {
 
   describe(`'placeHolder' prop`, () => {
     const defaultPlaceholder = 'Please choose a color';
+
     it(`by default should be defined`, async () => {
       const { inputDriver } = createDriver(<ColorInput />);
       expect((await inputDriver()).getPlaceholder()).toBe(defaultPlaceholder);

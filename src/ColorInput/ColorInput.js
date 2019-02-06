@@ -1,5 +1,5 @@
 import React from 'react';
-import { node } from 'prop-types';
+import { node, bool } from 'prop-types';
 import Input from '../Input';
 import styles from './ColorInput.st.css';
 
@@ -8,7 +8,10 @@ class ColorInput extends React.PureComponent {
   static displayName = 'ColorInput';
 
   static propTypes = {
+    /** placeholder to display */
     placeholder: node,
+    /** when set to true this component is disabled */
+    disabled: bool,
   };
 
   static defaultProps = {
