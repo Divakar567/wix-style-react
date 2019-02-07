@@ -7,7 +7,7 @@ import styles from './ColorInput.st.css';
 
 const Hash = () => <div className={styles.hash}>#</div>;
 const ColorViewer = ({ value }) => (
-  <div {...styles('viewer', { error: !!value })} />
+  <div style={{ backgroundColor: `#${value}` }} {...styles('viewer')} />
 );
 class ColorInput extends React.PureComponent {
   static displayName = 'ColorInput';
