@@ -1,9 +1,14 @@
 import React from 'react';
 import { node, bool } from 'prop-types';
+
+import { validateHex } from './validateHex';
 import Input from '../Input';
 import styles from './ColorInput.st.css';
 
 const Hash = () => <div className={styles.hash}>#</div>;
+const ColorViewer = ({ value }) => (
+  <div {...styles('viewer', { error: !!value })} />
+);
 class ColorInput extends React.PureComponent {
   static displayName = 'ColorInput';
 
@@ -12,6 +17,8 @@ class ColorInput extends React.PureComponent {
     placeholder: node,
     /** when set to true this component is disabled */
     disabled: bool,
+    /** error message which appears in tooltip */
+    errorMessage: node,
   };
 
   static defaultProps = {
@@ -21,11 +28,13 @@ class ColorInput extends React.PureComponent {
   state = {
     value: '',
     clicked: false,
+    error: undefined,
   };
 
   _onChange = evt => {
-    const value = evt.target.value.replace(/[^0-9A-F]/gi, '');
-    this.setState({ value });
+    const value = evt.target.value;
+    const error = value === '' ? 'error' : undefined;
+    this.setState({ value, error });
   };
 
   _onClick = () => {
@@ -33,17 +42,23 @@ class ColorInput extends React.PureComponent {
   };
 
   _onBlur = () => {
-    this.setState({ clicked: false });
+    const { value } = this.state;
+    const hex = validateHex(value);
+    const error = value === '' ? 'error' : undefined;
+    this.setState({ clicked: false, error, value: hex });
   };
 
   render() {
-    const { dataHook, disabled, placeholder } = this.props;
-    const { value, clicked } = this.state;
+    const { dataHook, disabled, placeholder, errorMessage } = this.props;
+    const { value, clicked, error } = this.state;
     const prefix = clicked || value ? <Hash /> : undefined;
     const placeHolder = !clicked ? placeholder : undefined;
+    const viewer = <ColorViewer value={value} />;
     return (
       <div {...styles('root')} data-hook={dataHook}>
         <Input
+          status={error}
+          statusMessage={errorMessage}
           prefix={prefix}
           placeholder={placeHolder}
           dataHook="colorinput-input"
@@ -53,6 +68,7 @@ class ColorInput extends React.PureComponent {
           onBlur={this._onBlur}
           disabled={disabled}
           value={value}
+          suffix={viewer}
         />
       </div>
     );

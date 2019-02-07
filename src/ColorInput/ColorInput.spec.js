@@ -19,20 +19,35 @@ describe('ColorInput', () => {
     });
   });
 
-  // describe('`value` prop', () => {
-  //   [
-  //     ['92', '929292'],
-  //     ['2C4', '22CC44'],
-  //     ['3491', '334499'],
-  //     ['#ZA8', 'A8'],
-  //   ].map(([expectation, output]) =>
-  //     it(`given ${expectation} should return ${output}`, async () => {
-  //       const { inputDriver } = createDriver(<ColorInput disabled />);
-  //       (await inputDriver()).enterText(expectation);
-  //       expect((await inputDriver()).getValue()).toBe(output);
-  //     }),
-  //   );
-  // });
+  describe('`value` prop', () => {
+    it(`should not be converted while typed`, async () => {
+      const userHex = '2C4';
+      const { inputDriver } = createDriver(<ColorInput disabled />);
+      (await inputDriver()).click();
+      (await inputDriver()).enterText(userHex);
+      expect((await inputDriver()).getValue()).toBe(userHex);
+    }),
+      [
+        ['92', '000000'],
+        ['2C4', '22CC44'],
+        ['3491', '000000'],
+        ['A88', 'AA8888'],
+        ['ZA8', '000000'],
+        ['2C45$#74', '000000'],
+        ['4EB7F568A7', '000000'],
+        ['4EB7F5', '4EB7F5'],
+        ['%4EB7F', '000000'],
+      ].map(([expectation, output]) =>
+        it(`given ${expectation} should return ${output} when blurred`, async () => {
+          const { inputDriver } = createDriver(<ColorInput disabled />);
+          (await inputDriver()).click();
+          (await inputDriver()).enterText(expectation);
+          expect((await inputDriver()).getValue()).toBe(expectation);
+          (await inputDriver()).blur();
+          expect((await inputDriver()).getValue()).toBe(output);
+        }),
+      );
+  });
 
   describe(`prefix '#'`, () => {
     it(`should be hidden when not clicked`, async () => {
@@ -40,13 +55,13 @@ describe('ColorInput', () => {
       expect((await inputDriver()).hasPrefix()).toBe(false);
     });
 
-    it(`should be visible when input clicked`, async () => {
+    it(`should be visible when input is clicked`, async () => {
       const { inputDriver } = createDriver(<ColorInput />);
       (await inputDriver()).click();
       expect((await inputDriver()).hasPrefix()).toBe(true);
     });
 
-    it(`should be visible when input is focus`, async () => {
+    it(`should be visible when input is focused`, async () => {
       const { inputDriver } = createDriver(<ColorInput />);
       (await inputDriver()).focus();
       expect((await inputDriver()).hasPrefix()).toBe(true);
@@ -65,6 +80,29 @@ describe('ColorInput', () => {
       (await inputDriver()).click();
       (await inputDriver()).blur();
       expect((await inputDriver()).hasPrefix()).toBe(false);
+    });
+  });
+
+  describe(`'placeHolder' prop`, () => {
+    const defaultPlaceholder = 'Please choose a color';
+
+    it(`by default should be defined`, async () => {
+      const { inputDriver } = createDriver(<ColorInput />);
+      expect((await inputDriver()).getPlaceholder()).toBe(defaultPlaceholder);
+    });
+
+    it(`should be equal to given`, async () => {
+      const customPlaceHolder = 'Please choose';
+      const { inputDriver } = createDriver(
+        <ColorInput placeholder={customPlaceHolder} />,
+      );
+      expect((await inputDriver()).getPlaceholder()).toBe(customPlaceHolder);
+    });
+
+    it(`should be undefined when input is clicked`, async () => {
+      const { inputDriver } = createDriver(<ColorInput />);
+      (await inputDriver()).click();
+      expect((await inputDriver()).getPlaceholder()).toBe('');
     });
   });
 
