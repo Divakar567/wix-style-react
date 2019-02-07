@@ -28,14 +28,13 @@ describe('ColorInput', () => {
       expect((await inputDriver()).getValue()).toBe(userHex);
     }),
       [
-        ['92', '000000'],
-        ['2C4', '22CC44'],
-        ['3491', '000000'],
-        ['A88', 'AA8888'],
-        ['ZA8', '000000'],
-        ['2C45$#74', '000000'],
-        ['4EB7F568A7', '000000'],
-        ['4EB7F5', '4EB7F5'],
+        ['12', '000000'],
+        ['123', '112233'],
+        ['1234', '000000'],
+        ['12345', '000000'],
+        ['123456', '123456'],
+        ['1234$#74', '000000'],
+        ['1234AB', '1234AB'],
         ['%4EB7F', '000000'],
       ].map(([expectation, output]) =>
         it(`given ${expectation} should return ${output} when blurred`, async () => {
