@@ -20,32 +20,25 @@ describe('ColorInput', () => {
   });
 
   describe('`value` prop', () => {
-    it(`should not be converted while typed`, async () => {
-      const userHex = '2C4';
-      const { inputDriver } = createDriver(<ColorInput disabled />);
-      (await inputDriver()).click();
-      (await inputDriver()).enterText(userHex);
-      expect((await inputDriver()).getValue()).toBe(userHex);
-    }),
-      [
-        ['12', '000000'],
-        ['123', '112233'],
-        ['1234', '000000'],
-        ['12345', '000000'],
-        ['123456', '123456'],
-        ['1234$#74', '000000'],
-        ['1234AB', '1234AB'],
-        ['%4EB7F', '000000'],
-      ].map(([expectation, output]) =>
-        it(`given ${expectation} should return ${output} when blurred`, async () => {
-          const { inputDriver } = createDriver(<ColorInput disabled />);
-          (await inputDriver()).click();
-          (await inputDriver()).enterText(expectation);
-          expect((await inputDriver()).getValue()).toBe(expectation);
-          (await inputDriver()).blur();
-          expect((await inputDriver()).getValue()).toBe(output);
-        }),
-      );
+    [
+      ['12', '000000'],
+      ['123', '112233'],
+      ['1234', '000000'],
+      ['12345', '000000'],
+      ['123456', '123456'],
+      ['1234$#74', '000000'],
+      ['1234AB', '1234AB'],
+      ['%4EB7F', '000000'],
+    ].map(([expectation, output]) =>
+      it(`given ${expectation} should return ${output} when blurred`, async () => {
+        const { inputDriver } = createDriver(<ColorInput disabled />);
+        (await inputDriver()).click();
+        (await inputDriver()).enterText(expectation);
+        expect((await inputDriver()).getValue()).toBe(expectation);
+        (await inputDriver()).blur();
+        expect((await inputDriver()).getValue()).toBe(output);
+      }),
+    );
   });
 
   describe(`prefix '#'`, () => {
@@ -82,30 +75,7 @@ describe('ColorInput', () => {
     });
   });
 
-  describe(`'placeHolder' prop`, () => {
-    const defaultPlaceholder = 'Please choose a color';
-
-    it(`by default should be defined`, async () => {
-      const { inputDriver } = createDriver(<ColorInput />);
-      expect((await inputDriver()).getPlaceholder()).toBe(defaultPlaceholder);
-    });
-
-    it(`should be equal to given`, async () => {
-      const customPlaceHolder = 'Please choose';
-      const { inputDriver } = createDriver(
-        <ColorInput placeholder={customPlaceHolder} />,
-      );
-      expect((await inputDriver()).getPlaceholder()).toBe(customPlaceHolder);
-    });
-
-    it(`should be undefined when input is clicked`, async () => {
-      const { inputDriver } = createDriver(<ColorInput />);
-      (await inputDriver()).click();
-      expect((await inputDriver()).getPlaceholder()).toBe('');
-    });
-  });
-
-  describe(`'placeHolder' prop`, () => {
+  describe(`'placeholder' prop`, () => {
     const defaultPlaceholder = 'Please choose a color';
 
     it(`by default should be defined`, async () => {
