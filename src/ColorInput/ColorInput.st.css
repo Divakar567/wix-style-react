@@ -7,19 +7,6 @@
   position: relative;
   text-align: center;
 }
- 
-.hash {
-  -st-states: disabled;
-  font-size: 16px;
-  padding-left: 6px;
-  color: value(D40);
-  margin-right: -6px;
-}
-
-.hash:disabled {
-  color: value(D55);
-}
-
 
 .viewer {
   -st-states: error;

@@ -1,7 +1,7 @@
 export const validateHex = hex => {
   const RE_HEX = /^#?([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/;
 
-  if (hex === '') {
+  if (hex === '' || !hex) {
     return hex;
   }
 

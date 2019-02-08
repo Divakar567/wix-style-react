@@ -1,11 +1,11 @@
 import React from 'react';
-import { node, bool } from 'prop-types';
+import { node, bool, string, func } from 'prop-types';
 
 import { validateHex } from './validateHex';
 import Input from '../Input';
+import { Hash } from './components/Hash';
 import styles from './ColorInput.st.css';
 
-const Hash = ({ disabled }) => <div {...styles('hash', { disabled })}>#</div>;
 const ColorViewer = ({ value }) => (
   <div style={{ backgroundColor: `#${value}` }} {...styles('viewer')} />
 );
@@ -19,20 +19,38 @@ class ColorInput extends React.PureComponent {
     disabled: bool,
     /** error message which appears in tooltip */
     errorMessage: node,
+    /** value */
+    value: string.isRequired,
+    /** callback function */
+    onChange: func.isRequired,
   };
 
   static defaultProps = {
     placeholder: 'Please choose a color',
   };
 
-  state = {
-    value: '',
-    clicked: false,
-    error: undefined,
+  constructor(props) {
+    super(props);
+    this.state = {
+      clicked: false,
+      value: props.value,
+      error: undefined,
+    };
+  }
+
+  _renderPrefix = () => {
+    const { value, disabled } = this.props;
+    const { clicked } = this.state;
+    return clicked || value ? <Hash disabled={disabled} /> : undefined;
+  };
+
+  _renderSuffix = () => {
+    const value = validateHex(this.state.value);
+    return <ColorViewer value={value} />;
   };
 
   _onChange = evt => {
-    const value = evt.target.value;
+    const { value } = evt.target;
     const error = value === '' ? 'error' : undefined;
     this.setState({ value, error });
   };
@@ -43,23 +61,25 @@ class ColorInput extends React.PureComponent {
 
   _onBlur = () => {
     const { value } = this.state;
+    const { onChange } = this.props;
+
     const hex = validateHex(value);
     const error = value === '' ? 'error' : undefined;
-    this.setState({ clicked: false, error, value: hex });
+    this.setState(
+      { clicked: false, error, value: hex },
+      () => onChange && onChange(hex),
+    );
   };
 
   render() {
     const { dataHook, disabled, placeholder, errorMessage } = this.props;
-    const { value, clicked, error } = this.state;
-    const prefix = clicked || value ? <Hash disabled={disabled} /> : undefined;
+    const { clicked, error, value } = this.state;
     const placeHolder = !clicked ? placeholder : undefined;
-    const viewer = <ColorViewer value={value} />;
     return (
       <div {...styles('root')} data-hook={dataHook}>
         <Input
           status={error}
           statusMessage={errorMessage}
-          prefix={prefix}
           placeholder={placeHolder}
           dataHook="colorinput-input"
           onChange={this._onChange}
@@ -68,7 +88,8 @@ class ColorInput extends React.PureComponent {
           onBlur={this._onBlur}
           disabled={disabled}
           value={value}
-          suffix={viewer}
+          prefix={this._renderPrefix()}
+          suffix={this._renderSuffix()}
         />
       </div>
     );
