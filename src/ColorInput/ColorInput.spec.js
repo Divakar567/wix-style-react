@@ -75,6 +75,14 @@ describe('ColorInput', () => {
     });
   });
 
+  describe(`input value`, () => {
+    it(`should convert letters to uppercase while typed`, async () => {
+      const { inputDriver } = createDriver(renderColorInput());
+      (await inputDriver()).enterText('abc');
+      expect((await inputDriver()).getValue()).toBe('ABC');
+    });
+  });
+
   describe('`disabled` prop', () => {
     it('should disable input', async () => {
       const disabled = true;

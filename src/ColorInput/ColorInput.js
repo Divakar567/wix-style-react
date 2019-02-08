@@ -19,9 +19,9 @@ class ColorInput extends React.PureComponent {
     disabled: bool,
     /** error message which appears in tooltip */
     errorMessage: node,
-    /** value */
+    /** input value */
     value: string.isRequired,
-    /** callback function */
+    /** input onChange callback */
     onChange: func.isRequired,
   };
 
@@ -50,7 +50,7 @@ class ColorInput extends React.PureComponent {
   };
 
   _onChange = evt => {
-    const { value } = evt.target;
+    const value = evt.target.value.toUpperCase();
     const error = value === '' ? 'error' : undefined;
     this.setState({ value, error });
   };
@@ -60,21 +60,19 @@ class ColorInput extends React.PureComponent {
   };
 
   _onBlur = () => {
-    const { value } = this.state;
     const { onChange } = this.props;
-
-    const hex = validateHex(value);
+    const value = validateHex(this.state.value);
     const error = value === '' ? 'error' : undefined;
     this.setState(
-      { clicked: false, error, value: hex },
-      () => onChange && onChange(hex),
+      { clicked: false, error, value },
+      () => onChange && onChange(value),
     );
   };
 
   render() {
     const { dataHook, disabled, placeholder, errorMessage } = this.props;
     const { clicked, error, value } = this.state;
-    const placeHolder = !clicked ? placeholder : undefined;
+    const placeHolder = clicked ? undefined : placeholder;
     return (
       <div {...styles('root')} data-hook={dataHook}>
         <Input
