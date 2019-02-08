@@ -22,3 +22,7 @@ export const validateHex = hex => {
 
   return '000000';
 };
+
+export const normalizeValue = hex => {
+  return hex.toUpperCase().replace('#', '');
+};

@@ -22,7 +22,7 @@ describe('ColorInput', () => {
     it('when value is passed', async () => {
       const value = 'value';
       const { inputDriver } = createDriver(renderColorInput({ value }));
-      expect((await inputDriver()).getValue()).toBe(value);
+      expect((await inputDriver()).getValue()).toBe('VALUE');
     });
   });
 
@@ -56,6 +56,13 @@ describe('ColorInput', () => {
       (await inputDriver()).click();
       (await inputDriver()).blur();
       expect((await inputDriver()).hasPrefix()).toBe(false);
+    });
+  });
+
+  describe(`suffix Viewer`, () => {
+    it(`should be null when value is empty string`, async () => {
+      const driver = createDriver(renderColorInput());
+      expect(await driver.isViewerNull()).toBe(true);
     });
   });
 
@@ -110,7 +117,7 @@ describe('ColorInput', () => {
       ['1234', '000000'],
       ['12345', '000000'],
       ['123456', '123456'],
-      ['1234$3a74', '000000'],
+      ['1234$3A74', '000000'],
       ['1234AB', '1234AB'],
       ['%4EB7F', '000000'],
     ].map(([expectation, output]) =>

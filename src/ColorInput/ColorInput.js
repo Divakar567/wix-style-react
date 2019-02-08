@@ -4,7 +4,7 @@ import { node, bool, string, func } from 'prop-types';
 import Input from '../Input';
 import { Hash, ColorViewer } from './components';
 
-import { validateHex } from './validateHex';
+import { validateHex, normalizeValue } from './hexConverter';
 import styles from './ColorInput.st.css';
 
 class ColorInput extends React.PureComponent {
@@ -31,7 +31,7 @@ class ColorInput extends React.PureComponent {
     super(props);
     this.state = {
       clicked: false,
-      value: props.value.replace('#', ''),
+      value: normalizeValue(props.value),
       error: undefined,
     };
   }
@@ -42,13 +42,10 @@ class ColorInput extends React.PureComponent {
     return clicked || value ? <Hash disabled={disabled} /> : undefined;
   };
 
-  _renderSuffix = () => {
-    const value = this.state.value;
-    return <ColorViewer value={value} />;
-  };
+  _renderSuffix = () => <ColorViewer value={this.state.value} />;
 
   _onChange = evt => {
-    const value = evt.target.value.toUpperCase().replace('#', '');
+    const value = normalizeValue(evt.target.value);
     const error = value === '' ? 'error' : undefined;
     this.setState({ value, error });
   };
