@@ -5,7 +5,7 @@ import { validateHex } from './validateHex';
 import Input from '../Input';
 import styles from './ColorInput.st.css';
 
-const Hash = () => <div className={styles.hash}>#</div>;
+const Hash = ({ disabled }) => <div {...styles('hash', { disabled })}>#</div>;
 const ColorViewer = ({ value }) => (
   <div style={{ backgroundColor: `#${value}` }} {...styles('viewer')} />
 );
@@ -51,7 +51,7 @@ class ColorInput extends React.PureComponent {
   render() {
     const { dataHook, disabled, placeholder, errorMessage } = this.props;
     const { value, clicked, error } = this.state;
-    const prefix = clicked || value ? <Hash /> : undefined;
+    const prefix = clicked || value ? <Hash disabled={disabled} /> : undefined;
     const placeHolder = !clicked ? placeholder : undefined;
     const viewer = <ColorViewer value={value} />;
     return (

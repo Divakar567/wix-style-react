@@ -53,6 +53,7 @@ import './RadioGroup.story.js'; // 4.3 RadioGroup
 import './ToggleSwitch/index.story'; // 4.4 ToggleSwitch
 import './SegmentedToggle/index.story'; // 4.5 SegmentedToggle
 import './Slider/index.story'; // 4.7 Slider
+import './ColorInput/index.story'; // 4.8 ColorInput
 
 // 5. Buttons
 import './Button/index.story.js'; // 5.1 Standard

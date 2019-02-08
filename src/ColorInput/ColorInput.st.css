@@ -9,12 +9,17 @@
 }
  
 .hash {
+  -st-states: disabled;
   font-size: 16px;
-  line-height: 1.5;
-  padding-left: 12px;
+  padding-left: 6px;
   color: value(D40);
   margin-right: -6px;
 }
+
+.hash:disabled {
+  color: value(D55);
+}
+
 
 .viewer {
   -st-states: error;
@@ -23,7 +28,6 @@
   border-radius: 2px;
   border: 1px solid value(D55);
   margin-right: 3px;
-  
 }
 
 .viewer:error {
