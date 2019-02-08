@@ -1,6 +1,8 @@
+import React from 'react';
 import { storySettings } from './storySettings';
 
-import ColorInput from '../../src/ColorInput';
+import { Layout, Cell } from 'wix-style-react/Layout';
+import ColorInput from 'wix-style-react/ColorInput';
 
 export default {
   category: storySettings.kind,
@@ -14,6 +16,12 @@ export default {
     dataHook: storySettings.dataHook,
     onChange: value => setState({ value }),
   }),
+
+  componentWrapper: ({ component }) => (
+    <Layout>
+      <Cell span={5}>{component}</Cell>
+    </Layout>
+  ),
 
   exampleProps: {
     errorMessage: '',

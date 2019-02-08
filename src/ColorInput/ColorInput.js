@@ -7,7 +7,7 @@ import { Hash, ColorViewer } from './components';
 import { validateHex, normalizeValue } from './hex-helpers';
 import styles from './ColorInput.st.css';
 
-class ColorInput extends React.PureComponent {
+class ColorInput extends React.Component {
   static displayName = 'ColorInput';
 
   static propTypes = {
@@ -42,7 +42,10 @@ class ColorInput extends React.PureComponent {
     return clicked || value ? <Hash disabled={disabled} /> : undefined;
   };
 
-  _renderSuffix = () => <ColorViewer value={this.state.value} />;
+  _renderSuffix = () => {
+    const { value, clicked } = this.state;
+    return <ColorViewer value={value} shown={clicked} />;
+  };
 
   _onChange = evt => {
     const value = normalizeValue(evt.target.value);
