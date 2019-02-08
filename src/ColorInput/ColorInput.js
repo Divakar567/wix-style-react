@@ -1,14 +1,12 @@
 import React from 'react';
 import { node, bool, string, func } from 'prop-types';
 
-import { validateHex } from './validateHex';
 import Input from '../Input';
-import { Hash } from './components/Hash';
+import { Hash, ColorViewer } from './components';
+
+import { validateHex } from './validateHex';
 import styles from './ColorInput.st.css';
 
-const ColorViewer = ({ value }) => (
-  <div style={{ backgroundColor: `#${value}` }} {...styles('viewer')} />
-);
 class ColorInput extends React.PureComponent {
   static displayName = 'ColorInput';
 
@@ -33,24 +31,24 @@ class ColorInput extends React.PureComponent {
     super(props);
     this.state = {
       clicked: false,
-      value: props.value,
+      value: props.value.replace('#', ''),
       error: undefined,
     };
   }
 
   _renderPrefix = () => {
-    const { value, disabled } = this.props;
-    const { clicked } = this.state;
+    const { disabled } = this.props;
+    const { clicked, value } = this.state;
     return clicked || value ? <Hash disabled={disabled} /> : undefined;
   };
 
   _renderSuffix = () => {
-    const value = validateHex(this.state.value);
+    const value = this.state.value;
     return <ColorViewer value={value} />;
   };
 
   _onChange = evt => {
-    const value = evt.target.value.toUpperCase();
+    const value = evt.target.value.toUpperCase().replace('#', '');
     const error = value === '' ? 'error' : undefined;
     this.setState({ value, error });
   };

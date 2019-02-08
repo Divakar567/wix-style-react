@@ -7,16 +7,3 @@
   position: relative;
   text-align: center;
 }
-
-.viewer {
-  -st-states: error;
-  width: 18px;
-  height: 18px;
-  border-radius: 2px;
-  border: 1px solid value(D55);
-  margin-right: 3px;
-}
-
-.viewer:error {
-  background-image: linear-gradient(135deg, transparent 49%, red 49%, red 53%, transparent 53%); 
-}

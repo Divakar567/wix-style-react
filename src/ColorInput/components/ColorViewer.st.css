@@ -1,0 +1,18 @@
+:import {
+  -st-from: "wix-ui-core/dist/src/themes/backoffice/colors.st.css";
+  -st-named: D55;
+}
+
+
+.root {
+  -st-states: empty;
+  width: 18px;
+  height: 18px;
+  border-radius: 2px;
+  border: 1px solid value(D55);
+  margin-right: 3px;
+}
+
+.root:empty {
+  background-image: linear-gradient(135deg, transparent 49%, red 49%, red 53%, transparent 53%); 
+}

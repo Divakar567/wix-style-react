@@ -10,6 +10,7 @@ export default {
   componentPath: '../../src/ColorInput/ColorInput.js',
 
   componentProps: setState => ({
+    value: '',
     dataHook: storySettings.dataHook,
     onChange: value => setState({ value }),
   }),

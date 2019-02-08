@@ -81,6 +81,11 @@ describe('ColorInput', () => {
       (await inputDriver()).enterText('abc');
       expect((await inputDriver()).getValue()).toBe('ABC');
     });
+    it(`should strip # from pasted value`, async () => {
+      const { inputDriver } = createDriver(renderColorInput());
+      (await inputDriver()).enterText('#abc');
+      expect((await inputDriver()).getValue()).toBe('ABC');
+    });
   });
 
   describe('`disabled` prop', () => {
@@ -105,7 +110,7 @@ describe('ColorInput', () => {
       ['1234', '000000'],
       ['12345', '000000'],
       ['123456', '123456'],
-      ['1234$#74', '000000'],
+      ['1234$3a74', '000000'],
       ['1234AB', '1234AB'],
       ['%4EB7F', '000000'],
     ].map(([expectation, output]) =>
