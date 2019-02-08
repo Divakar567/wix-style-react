@@ -4,7 +4,7 @@ import { node, bool, string, func } from 'prop-types';
 import Input from '../Input';
 import { Hash, ColorViewer } from './components';
 
-import { validateHex, normalizeValue } from './hexConverter';
+import { validateHex, normalizeValue } from './hex-helpers';
 import styles from './ColorInput.st.css';
 
 class ColorInput extends React.PureComponent {
