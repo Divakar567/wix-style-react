@@ -1,3 +1,5 @@
+import Color from 'color';
+
 export const validateHex = hex => {
   const RE_HEX = /^#?([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/;
 
@@ -23,6 +25,11 @@ export const validateHex = hex => {
   return '000000';
 };
 
-export const normalizeValue = hex => {
-  return hex.toUpperCase().replace('#', '');
+export const normalizeValue = color => {
+  if (typeof color === 'object') {
+    return Color(color)
+      .hex()
+      .replace('#', '');
+  }
+  return color.toUpperCase().replace('#', '');
 };

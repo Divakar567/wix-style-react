@@ -64,6 +64,34 @@ describe('ColorInput', () => {
       const driver = createDriver(renderColorInput());
       expect(await driver.isViewerNull()).toBe(true);
     });
+
+    it(`should be null when value is empty string`, async () => {
+      const driver = createDriver(renderColorInput());
+      expect(await driver.isViewerNull()).toBe(true);
+    });
+  });
+
+  describe('suffix ColorPicker', () => {
+    it(`should be open when input is clicked`, async () => {
+      const driver = createDriver(renderColorInput());
+      (await driver.inputDriver()).click();
+      expect((await driver.colorPickerDriver()).exists()).toBe(true);
+    });
+    it(`should close onBlur`, async () => {
+      const driver = createDriver(renderColorInput());
+      (await driver.inputDriver()).click();
+      (await driver.inputDriver()).blur();
+      expect((await driver.colorPickerDriver()).exists()).toBe(false);
+    });
+
+    it(`should call onChange when button confirm is clicked`, async () => {
+      const onChange = jest.fn();
+      const driver = createDriver(renderColorInput({ onChange }));
+      (await driver.inputDriver()).click();
+      (await driver.colorPickerDriver()).confirm();
+      expect(onChange).toHaveBeenCalledTimes(1);
+      expect(onChange.mock.calls[0][0]).toBe('');
+    });
   });
 
   describe(`error state`, () => {
@@ -112,14 +140,14 @@ describe('ColorInput', () => {
 
   describe('`onChange` prop', () => {
     [
-      ['12', '000000'],
-      ['123', '112233'],
-      ['1234', '000000'],
-      ['12345', '000000'],
-      ['123456', '123456'],
-      ['1234$3A74', '000000'],
-      ['1234AB', '1234AB'],
-      ['%4EB7F', '000000'],
+      ['12', '#000000'],
+      ['123', '#112233'],
+      ['1234', '#000000'],
+      ['12345', '#000000'],
+      ['123456', '#123456'],
+      ['1234$3A74', '#000000'],
+      ['1234AB', '#1234AB'],
+      ['%4EB7F', '#000000'],
     ].map(([expectation, output]) =>
       it(`given ${expectation} onChange should return ${output} when blurred`, async () => {
         const onChange = jest.fn();

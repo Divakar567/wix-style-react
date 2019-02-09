@@ -36,6 +36,12 @@ class ColorInput extends React.Component {
     };
   }
 
+  _isError = value => {
+    return value === '' ? 'error' : undefined;
+  };
+
+  _onPickerChange = value => this.setState({ value: normalizeValue(value) });
+
   _renderPrefix = () => {
     const { disabled } = this.props;
     const { clicked, value } = this.state;
@@ -44,13 +50,19 @@ class ColorInput extends React.Component {
 
   _renderSuffix = () => {
     const { value, clicked } = this.state;
-    return <ColorViewer value={value} shown={clicked} />;
+    return (
+      <ColorViewer
+        value={`#${value}`}
+        shown={clicked}
+        onChange={this._onPickerChange}
+        onConfirm={this._onBlur}
+      />
+    );
   };
 
   _onChange = evt => {
     const value = normalizeValue(evt.target.value);
-    const error = value === '' ? 'error' : undefined;
-    this.setState({ value, error });
+    this.setState({ value, error: this._isError(value) });
   };
 
   _onClick = () => {
@@ -60,10 +72,9 @@ class ColorInput extends React.Component {
   _onBlur = () => {
     const { onChange } = this.props;
     const value = validateHex(this.state.value);
-    const error = value === '' ? 'error' : undefined;
     this.setState(
-      { clicked: false, error, value },
-      () => onChange && onChange(value),
+      { clicked: false, error: this._isError(value), value },
+      () => onChange && onChange(value === '' ? '' : `#${value}`),
     );
   };
 
