@@ -32,7 +32,10 @@ class ColorInput extends React.Component {
     super(props);
     this.state = {
       clicked: false,
-      value: props.value.toUpperCase(),
+      value:
+        props.value &&
+        typeof props.value === 'string' &&
+        props.value.toUpperCase(),
       error: undefined,
     };
   }
