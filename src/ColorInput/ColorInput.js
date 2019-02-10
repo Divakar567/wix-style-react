@@ -1,10 +1,11 @@
 import React from 'react';
+import Color from 'color';
 import { node, bool, string, func } from 'prop-types';
 
 import Input from '../Input';
 import { Hash, ColorViewer } from './components';
 
-import { validateHex, normalizeValue } from './hex-helpers';
+import { validateHex } from './hex-helpers';
 import styles from './ColorInput.st.css';
 
 class ColorInput extends React.Component {
@@ -31,7 +32,7 @@ class ColorInput extends React.Component {
     super(props);
     this.state = {
       clicked: false,
-      value: normalizeValue(props.value),
+      value: props.value.toUpperCase(),
       error: undefined,
     };
   }
@@ -40,7 +41,10 @@ class ColorInput extends React.Component {
     return value === '' ? 'error' : undefined;
   };
 
-  _onPickerChange = value => this.setState({ value: normalizeValue(value) });
+  _onPickerChange = value =>
+    this.setState({
+      value: Color(value).hex(),
+    });
 
   _renderPrefix = () => {
     const { disabled } = this.props;
@@ -52,7 +56,7 @@ class ColorInput extends React.Component {
     const { value, clicked } = this.state;
     return (
       <ColorViewer
-        value={`#${value}`}
+        value={value}
         shown={clicked}
         onChange={this._onPickerChange}
         onConfirm={this._onBlur}
@@ -61,8 +65,11 @@ class ColorInput extends React.Component {
   };
 
   _onChange = evt => {
-    const value = normalizeValue(evt.target.value);
-    this.setState({ value, error: this._isError(value) });
+    const value = evt.target.value.toUpperCase().replace('#', '');
+    this.setState({
+      value: value === '' ? '' : `#${value}`,
+      error: this._isError(value),
+    });
   };
 
   _onClick = () => {
@@ -72,10 +79,9 @@ class ColorInput extends React.Component {
   _onBlur = () => {
     const { onChange } = this.props;
     const value = validateHex(this.state.value);
-    this.setState(
-      { clicked: false, error: this._isError(value), value },
-      () => onChange && onChange(value === '' ? '' : `#${value}`),
-    );
+    const error = this._isError(value);
+    const callback = () => onChange && onChange(value);
+    this.setState({ clicked: false, error, value }, callback);
   };
 
   render() {
@@ -94,7 +100,7 @@ class ColorInput extends React.Component {
           onFocus={this._onClick}
           onBlur={this._onBlur}
           disabled={disabled}
-          value={value}
+          value={value.replace('#', '')}
           prefix={this._renderPrefix()}
           suffix={this._renderSuffix()}
         />

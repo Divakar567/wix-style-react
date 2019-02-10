@@ -64,11 +64,6 @@ describe('ColorInput', () => {
       const driver = createDriver(renderColorInput());
       expect(await driver.isViewerNull()).toBe(true);
     });
-
-    it(`should be null when value is empty string`, async () => {
-      const driver = createDriver(renderColorInput());
-      expect(await driver.isViewerNull()).toBe(true);
-    });
   });
 
   describe('suffix ColorPicker', () => {
