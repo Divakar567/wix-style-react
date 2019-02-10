@@ -1,9 +1,0 @@
-:import {
-  -st-from: "wix-ui-core/dist/src/themes/backoffice/colors.st.css";
-  -st-named: D40,D55;
-}
-
-.root {
-  position: relative;
-  text-align: center;
-}

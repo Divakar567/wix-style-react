@@ -6,7 +6,6 @@ import Input from '../Input';
 import { Hash, ColorViewer } from './components';
 
 import { validateHex } from './hex-helpers';
-import styles from './ColorInput.st.css';
 
 class ColorInput extends React.Component {
   static displayName = 'ColorInput';
@@ -98,22 +97,20 @@ class ColorInput extends React.Component {
     const { clicked, error, value } = this.state;
     const placeHolder = clicked ? undefined : placeholder;
     return (
-      <div {...styles('root')} data-hook={dataHook}>
-        <Input
-          status={error}
-          statusMessage={errorMessage}
-          placeholder={placeHolder}
-          dataHook="colorinput-input"
-          onChange={this._onChange}
-          onInputClicked={this._onClick}
-          onFocus={this._onClick}
-          onBlur={this._onBlur}
-          disabled={disabled}
-          value={value.replace('#', '')}
-          prefix={this._renderPrefix()}
-          suffix={this._renderSuffix()}
-        />
-      </div>
+      <Input
+        status={error}
+        statusMessage={errorMessage}
+        placeholder={placeHolder}
+        data-hook={dataHook}
+        onChange={this._onChange}
+        onInputClicked={this._onClick}
+        onFocus={this._onClick}
+        onBlur={this._onBlur}
+        disabled={disabled}
+        value={value.replace('#', '')}
+        prefix={this._renderPrefix()}
+        suffix={this._renderSuffix()}
+      />
     );
   }
 }

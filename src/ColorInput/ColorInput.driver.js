@@ -1,11 +1,11 @@
 import { baseUniDriverFactory } from 'wix-ui-test-utils/base-driver';
-import { inputTestkitFactory, colorPickerTestkitFactory } from '../../testkit';
+import { colorPickerTestkitFactory } from '../../testkit';
+import inputDriverFactory from '../Input/Input.driver';
 
 export const colorInputDriverFactory = base => {
   const inputTestkit = element =>
-    inputTestkitFactory({
-      wrapper: element,
-      dataHook: 'colorinput-input',
+    inputDriverFactory({
+      element,
     });
 
   const colorPickerTestkit = element =>
