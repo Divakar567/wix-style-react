@@ -80,10 +80,11 @@ class ColorInput extends React.Component {
     });
   };
 
-  _onClick = () => {
-    this.setState({ clicked: true });
-  };
+  _onClick = () => this.setState({ clicked: true });
 
+  _onKeyDown = e => {
+    if (e.key === 'Enter') this._onBlur();
+  };
   _onBlur = () => {
     const { onChange } = this.props;
     const value = validateHex(this.state.value);
@@ -102,6 +103,7 @@ class ColorInput extends React.Component {
         statusMessage={errorMessage}
         placeholder={placeHolder}
         data-hook={dataHook}
+        onKeyDown={this._onKeyDown}
         onChange={this._onChange}
         onInputClicked={this._onClick}
         onFocus={this._onClick}

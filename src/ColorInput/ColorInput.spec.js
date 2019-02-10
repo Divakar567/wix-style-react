@@ -13,16 +13,70 @@ describe('ColorInput', () => {
 
   const createDriver = createUniDriverFactory(colorInputPrivateDriverFactory);
 
-  it('should render Input component', async () => {
-    const { inputDriver } = createDriver(renderColorInput());
-    expect((await inputDriver()).exists()).toBe(true);
-  });
-
-  describe('should be in controlled mode', () => {
-    it('when value is passed', async () => {
+  describe('Input ', () => {
+    it('should render Input component', async () => {
+      const { inputDriver } = createDriver(renderColorInput());
+      expect((await inputDriver()).exists()).toBe(true);
+    });
+    it('should be in controlled mode when value is passed', async () => {
       const value = 'value';
       const { inputDriver } = createDriver(renderColorInput({ value }));
       expect((await inputDriver()).getValue()).toBe('VALUE');
+    });
+    it('keyboard key Enter should fire confirm event', async () => {
+      const { inputDriver } = createDriver(renderColorInput());
+      (await inputDriver()).enterText('aze');
+      (await inputDriver()).keyDown('Enter');
+      expect((await inputDriver()).getValue()).toBe('000000');
+    });
+    describe(`error state`, () => {
+      it(`should be set when value is empty and input is blurred`, async () => {
+        const { inputDriver } = createDriver(renderColorInput());
+        (await inputDriver()).click();
+        (await inputDriver()).blur();
+        expect((await inputDriver()).hasError()).toBe(true);
+      });
+      it(`should be set when value is deleted`, async () => {
+        const text = 'hello';
+        const { inputDriver } = createDriver(renderColorInput());
+        (await inputDriver()).enterText(text);
+        (await inputDriver()).enterText('');
+        expect((await inputDriver()).hasError()).toBe(true);
+      });
+    });
+    describe(`input value`, () => {
+      it(`should convert letters to uppercase while typed`, async () => {
+        const { inputDriver } = createDriver(renderColorInput());
+        (await inputDriver()).enterText('abc');
+        expect((await inputDriver()).getValue()).toBe('ABC');
+      });
+      it(`should strip # from pasted value`, async () => {
+        const { inputDriver } = createDriver(renderColorInput());
+        (await inputDriver()).enterText('#abc');
+        expect((await inputDriver()).getValue()).toBe('ABC');
+      });
+    });
+    describe('`onChange` prop', () => {
+      [
+        ['12', '#000000'],
+        ['123', '#112233'],
+        ['1234', '#000000'],
+        ['12345', '#000000'],
+        ['123456', '#123456'],
+        ['1234$3A74', '#000000'],
+        ['1234AB', '#1234AB'],
+        ['%4EB7F', '#000000'],
+      ].map(([expectation, output]) =>
+        it(`given ${expectation} onChange should return ${output} when blurred`, async () => {
+          const onChange = jest.fn();
+          const { inputDriver } = createDriver(renderColorInput({ onChange }));
+          (await inputDriver()).enterText(expectation);
+          expect((await inputDriver()).getValue()).toBe(expectation);
+          (await inputDriver()).blur();
+          expect(onChange).toHaveBeenCalledTimes(1);
+          expect(onChange.mock.calls[0][0]).toBe(output);
+        }),
+      );
     });
   });
 
@@ -59,20 +113,18 @@ describe('ColorInput', () => {
     });
   });
 
-  describe(`suffix Viewer`, () => {
+  describe('suffix ColorViewer', () => {
     it(`should be null when value is empty string`, async () => {
       const driver = createDriver(renderColorInput());
       expect(await driver.isViewerNull()).toBe(true);
     });
-  });
 
-  describe('suffix ColorPicker', () => {
-    it(`should be open when input is clicked`, async () => {
+    it(`should be open ColorPicker when input is clicked`, async () => {
       const driver = createDriver(renderColorInput());
       (await driver.inputDriver()).click();
       expect((await driver.colorPickerDriver()).exists()).toBe(true);
     });
-    it(`should close onBlur`, async () => {
+    it(`should close ColorPicker onBlur`, async () => {
       const driver = createDriver(renderColorInput());
       (await driver.inputDriver()).click();
       (await driver.inputDriver()).blur();
@@ -89,35 +141,6 @@ describe('ColorInput', () => {
     });
   });
 
-  describe(`error state`, () => {
-    it(`should be set when value is empty and input is blurred`, async () => {
-      const { inputDriver } = createDriver(renderColorInput());
-      (await inputDriver()).click();
-      (await inputDriver()).blur();
-      expect((await inputDriver()).hasError()).toBe(true);
-    });
-    it(`should be set when value is deleted`, async () => {
-      const text = 'hello';
-      const { inputDriver } = createDriver(renderColorInput());
-      (await inputDriver()).enterText(text);
-      (await inputDriver()).enterText('');
-      expect((await inputDriver()).hasError()).toBe(true);
-    });
-  });
-
-  describe(`input value`, () => {
-    it(`should convert letters to uppercase while typed`, async () => {
-      const { inputDriver } = createDriver(renderColorInput());
-      (await inputDriver()).enterText('abc');
-      expect((await inputDriver()).getValue()).toBe('ABC');
-    });
-    it(`should strip # from pasted value`, async () => {
-      const { inputDriver } = createDriver(renderColorInput());
-      (await inputDriver()).enterText('#abc');
-      expect((await inputDriver()).getValue()).toBe('ABC');
-    });
-  });
-
   describe('`disabled` prop', () => {
     it('should disable input', async () => {
       const disabled = true;
@@ -131,29 +154,6 @@ describe('ColorInput', () => {
       const driver = createDriver(renderColorInput({ disabled, value }));
       expect(await driver.isHashDisabled()).toBe(true);
     });
-  });
-
-  describe('`onChange` prop', () => {
-    [
-      ['12', '#000000'],
-      ['123', '#112233'],
-      ['1234', '#000000'],
-      ['12345', '#000000'],
-      ['123456', '#123456'],
-      ['1234$3A74', '#000000'],
-      ['1234AB', '#1234AB'],
-      ['%4EB7F', '#000000'],
-    ].map(([expectation, output]) =>
-      it(`given ${expectation} onChange should return ${output} when blurred`, async () => {
-        const onChange = jest.fn();
-        const { inputDriver } = createDriver(renderColorInput({ onChange }));
-        (await inputDriver()).enterText(expectation);
-        expect((await inputDriver()).getValue()).toBe(expectation);
-        (await inputDriver()).blur();
-        expect(onChange).toHaveBeenCalledTimes(1);
-        expect(onChange.mock.calls[0][0]).toBe(output);
-      }),
-    );
   });
 
   describe(`'placeholder' prop`, () => {

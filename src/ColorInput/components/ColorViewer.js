@@ -11,8 +11,8 @@ export class ColorViewer extends React.Component {
         showArrow
         fixed
         shown={clicked}
-        appendTo="parent"
         placement="bottom"
+        appendTo="parent"
       >
         <Popover.Element>
           <div
