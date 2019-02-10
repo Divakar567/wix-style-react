@@ -5,10 +5,15 @@ import styles from './ColorViewer.st.css';
 
 export class ColorViewer extends React.Component {
   render() {
-    const { value, shown, onChange, onConfirm } = this.props;
-
+    const { value, clicked, onChange, onConfirm, onCancel } = this.props;
     return (
-      <Popover showArrow shown={shown} appendTo="parent" placement="bottom">
+      <Popover
+        showArrow
+        fixed
+        shown={clicked}
+        appendTo="parent"
+        placement="bottom"
+      >
         <Popover.Element>
           <div
             data-hook="colorinput-viewer"
@@ -21,7 +26,7 @@ export class ColorViewer extends React.Component {
             dataHook="colorinput-colorpicker"
             showConverter={false}
             showInput={false}
-            onCancel={() => 'Cancelled'}
+            onCancel={onCancel}
             onChange={onChange}
             onConfirm={onConfirm}
             value={value}

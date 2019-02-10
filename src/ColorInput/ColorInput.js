@@ -37,15 +37,15 @@ class ColorInput extends React.Component {
     };
   }
 
-  _isError = value => {
-    return value === '' ? 'error' : undefined;
-  };
-
+  // ColorPicker methods
   _onPickerChange = value =>
     this.setState({
       value: Color(value).hex(),
     });
 
+  _onPickerCancel = () => this.setState({ value: this.props.value });
+
+  // Affixes
   _renderPrefix = () => {
     const { disabled } = this.props;
     const { clicked, value } = this.state;
@@ -57,11 +57,17 @@ class ColorInput extends React.Component {
     return (
       <ColorViewer
         value={value}
-        shown={clicked}
+        clicked={clicked}
         onChange={this._onPickerChange}
+        onCancel={this._onPickerCancel}
         onConfirm={this._onBlur}
       />
     );
+  };
+
+  // ColorInput methods
+  _isError = value => {
+    return value === '' ? 'error' : undefined;
   };
 
   _onChange = evt => {
