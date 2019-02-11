@@ -22,7 +22,7 @@ class ColorInput extends React.Component {
     /** input value */
     value: string.isRequired,
     /** input onChange callback */
-    onChange: func.isRequired,
+    onChange: func,
   };
 
   static defaultProps = {
@@ -110,7 +110,7 @@ class ColorInput extends React.Component {
         status={error}
         statusMessage={errorMessage}
         placeholder={placeHolder}
-        data-hook={dataHook}
+        dataHook={dataHook}
         size={this._sizeMapping(size)}
         onKeyDown={this._onKeyDown}
         onChange={this._onChange}

@@ -228,4 +228,10 @@ export default {
       children: <div />,
     },
   },
+
+  ColorInput: {
+    props: {
+      value: '#000',
+    },
+  },
 };

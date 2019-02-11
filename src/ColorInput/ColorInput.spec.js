@@ -3,8 +3,13 @@ import { createUniDriverFactory } from 'wix-ui-test-utils/uni-driver-factory';
 
 import ColorInput from './ColorInput';
 import { colorInputPrivateDriverFactory } from './ColorInput.driver.private';
+import { requestAnimationFramePolyfill } from '../../testkit/polyfills';
 
 describe('ColorInput', () => {
+  beforeAll(() => {
+    requestAnimationFramePolyfill.install();
+  });
+
   const renderColorInput = ({
     value = '',
     onChange = () => {},
