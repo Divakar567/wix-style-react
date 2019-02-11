@@ -4,15 +4,28 @@ import ColorPicker from '../../ColorPicker';
 import styles from './ColorViewer.st.css';
 
 export class ColorViewer extends React.Component {
+  static defaultProps = {
+    placement: 'bottom',
+    appendTo: 'parent',
+  };
   render() {
-    const { value, clicked, onChange, onConfirm, onCancel, size } = this.props;
+    const {
+      value,
+      clicked,
+      onChange,
+      onConfirm,
+      onCancel,
+      size,
+      placement,
+      appendTo,
+    } = this.props;
     return (
       <Popover
         showArrow
         fixed
         shown={clicked}
-        placement="bottom"
-        appendTo="parent"
+        placement={placement}
+        appendTo={appendTo}
       >
         <Popover.Element>
           <div

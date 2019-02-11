@@ -3,6 +3,7 @@ import { storySettings } from './storySettings';
 
 import { Layout, Cell } from 'wix-style-react/Layout';
 import ColorInput from 'wix-style-react/ColorInput';
+import { placements } from 'wix-style-react/Popover';
 
 export default {
   category: storySettings.kind,
@@ -18,6 +19,8 @@ export default {
     onChange: value => setState({ value }),
     size: 'medium',
     errorMessage: '',
+    popoverPlacement: 'bottom',
+    popoverAppendTo: 'parent',
     disabled: false,
   }),
 
@@ -30,5 +33,13 @@ export default {
   exampleProps: {
     errorMessage: '',
     size: ['small', 'medium', 'large'],
+    popoverPlacement: [...placements],
+    popoverAppendTo: [
+      { label: 'window', value: window },
+      { label: 'scrollParent', value: 'scrollParent' },
+      { label: 'viewport', value: 'viewport' },
+      { label: 'parent', value: 'parent' },
+      { label: 'null', value: null },
+    ],
   },
 };

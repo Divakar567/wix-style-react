@@ -2,6 +2,7 @@ import React from 'react';
 import Color from 'color';
 import { node, bool, string, func, oneOf } from 'prop-types';
 
+import { placements } from '../Popover';
 import Input from '../Input';
 import { Hash, ColorViewer } from './components';
 
@@ -19,6 +20,10 @@ class ColorInput extends React.Component {
     errorMessage: node,
     /** input size */
     size: oneOf(['small', 'medium', 'large']),
+    /** colorpicker popover placement */
+    popoverPlacement: oneOf([...placements]),
+    /** colorpicker popover calculation to a dom element */
+    popoverAppendTo: oneOf([...placements]),
     /** input value */
     value: string.isRequired,
     /** input onChange callback */
@@ -28,6 +33,8 @@ class ColorInput extends React.Component {
   static defaultProps = {
     placeholder: 'Please choose a color',
     size: 'medium',
+    popoverPlacement: 'bottom',
+    popoverAppendTo: 'parent',
   };
 
   constructor(props) {
@@ -59,12 +66,13 @@ class ColorInput extends React.Component {
 
   _renderSuffix = () => {
     const { value, clicked } = this.state;
-    const { size } = this.props;
+    const { size, popoverPlacement } = this.props;
     return (
       <ColorViewer
         value={value}
         clicked={clicked}
         size={this._sizeMapping(size)}
+        placement={popoverPlacement}
         onChange={this._onPickerChange}
         onCancel={this._onPickerCancel}
         onConfirm={this._onBlur}
