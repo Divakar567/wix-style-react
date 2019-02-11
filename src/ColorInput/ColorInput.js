@@ -1,6 +1,6 @@
 import React from 'react';
 import Color from 'color';
-import { node, bool, string, func } from 'prop-types';
+import { node, bool, string, func, oneOf } from 'prop-types';
 
 import Input from '../Input';
 import { Hash, ColorViewer } from './components';
@@ -17,6 +17,8 @@ class ColorInput extends React.Component {
     disabled: bool,
     /** error message which appears in tooltip */
     errorMessage: node,
+    /** input size */
+    size: oneOf(['small', 'medium', 'large']),
     /** input value */
     value: string.isRequired,
     /** input onChange callback */
@@ -25,6 +27,7 @@ class ColorInput extends React.Component {
 
   static defaultProps = {
     placeholder: 'Please choose a color',
+    size: 'medium',
   };
 
   constructor(props) {
@@ -56,10 +59,12 @@ class ColorInput extends React.Component {
 
   _renderSuffix = () => {
     const { value, clicked } = this.state;
+    const { size } = this.props;
     return (
       <ColorViewer
         value={value}
         clicked={clicked}
+        size={this._sizeMapping(size)}
         onChange={this._onPickerChange}
         onCancel={this._onPickerCancel}
         onConfirm={this._onBlur}
@@ -68,6 +73,10 @@ class ColorInput extends React.Component {
   };
 
   // ColorInput methods
+  _sizeMapping = size => {
+    return size === 'medium' ? 'normal' : size;
+  };
+
   _isError = value => {
     return value === '' ? 'error' : undefined;
   };
@@ -82,9 +91,8 @@ class ColorInput extends React.Component {
 
   _onClick = () => this.setState({ clicked: true });
 
-  _onKeyDown = e => {
-    if (e.key === 'Enter') this._onBlur();
-  };
+  _onKeyDown = e => e.key === 'Enter' && this._onBlur();
+
   _onBlur = () => {
     const { onChange } = this.props;
     const value = validateHex(this.state.value);
@@ -94,7 +102,7 @@ class ColorInput extends React.Component {
   };
 
   render() {
-    const { dataHook, disabled, placeholder, errorMessage } = this.props;
+    const { dataHook, disabled, placeholder, errorMessage, size } = this.props;
     const { clicked, error, value } = this.state;
     const placeHolder = clicked ? undefined : placeholder;
     return (
@@ -103,6 +111,7 @@ class ColorInput extends React.Component {
         statusMessage={errorMessage}
         placeholder={placeHolder}
         data-hook={dataHook}
+        size={this._sizeMapping(size)}
         onKeyDown={this._onKeyDown}
         onChange={this._onChange}
         onInputClicked={this._onClick}

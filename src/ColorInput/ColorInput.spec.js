@@ -44,7 +44,7 @@ describe('ColorInput', () => {
         expect((await inputDriver()).hasError()).toBe(true);
       });
     });
-    describe(`input value`, () => {
+    describe(`value`, () => {
       it(`should convert letters to uppercase while typed`, async () => {
         const { inputDriver } = createDriver(renderColorInput());
         (await inputDriver()).enterText('abc');
@@ -56,6 +56,12 @@ describe('ColorInput', () => {
         expect((await inputDriver()).getValue()).toBe('ABC');
       });
     });
+
+    it(`'size' by default should be medium`, async () => {
+      const { inputDriver } = createDriver(renderColorInput());
+      expect((await inputDriver()).isOfSize('normal')).toBe(true);
+    });
+
     describe('`onChange` prop', () => {
       [
         ['12', '#000000'],
@@ -129,6 +135,11 @@ describe('ColorInput', () => {
       (await driver.inputDriver()).click();
       (await driver.inputDriver()).blur();
       expect((await driver.colorPickerDriver()).exists()).toBe(false);
+    });
+
+    it(`size should be set as given`, async () => {
+      const driver = createDriver(renderColorInput({ size: 'small' }));
+      expect(await driver.getViewerSize()).toBe('small');
     });
 
     it(`should call onChange when button confirm is clicked`, async () => {

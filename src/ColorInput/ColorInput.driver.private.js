@@ -17,9 +17,17 @@ export const colorInputPrivateDriverFactory = base => {
       viewerStyles,
       'empty',
     )) === 'true';
+
+  const getViewerSize = async () =>
+    await getStylableState(
+      base.$('[data-hook="colorinput-viewer"]'),
+      viewerStyles,
+      'size',
+    );
   return {
     ...publicDriverFactory(base),
     isHashDisabled: async () => await isHashDisabled(),
     isViewerNull: async () => await isViewerNull(),
+    getViewerSize: async () => await getViewerSize(),
   };
 };

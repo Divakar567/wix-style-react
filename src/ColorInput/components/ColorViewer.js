@@ -5,7 +5,7 @@ import styles from './ColorViewer.st.css';
 
 export class ColorViewer extends React.Component {
   render() {
-    const { value, clicked, onChange, onConfirm, onCancel } = this.props;
+    const { value, clicked, onChange, onConfirm, onCancel, size } = this.props;
     return (
       <Popover
         showArrow
@@ -18,7 +18,10 @@ export class ColorViewer extends React.Component {
           <div
             data-hook="colorinput-viewer"
             style={{ backgroundColor: value }}
-            {...styles('root', { empty: value === '' })}
+            {...styles('root', {
+              empty: value === '',
+              size,
+            })}
           />
         </Popover.Element>
         <Popover.Content>

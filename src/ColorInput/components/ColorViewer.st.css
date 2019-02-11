@@ -5,7 +5,7 @@
 
 
 .root {
-  -st-states: empty;
+  -st-states: empty, size(enum(small, medium, large));
   width: 18px;
   height: 18px;
   border-radius: 2px;
@@ -15,4 +15,19 @@
 
 .root:empty {
   background-image: linear-gradient(135deg, transparent 49%, red 49%, red 53%, transparent 53%); 
+}
+
+.root:size(small) {
+  width: 18px;
+  height: 18px;
+}
+
+.root:size(medium) {
+  width: 18px;
+  height: 18px;
+}
+
+.root:size(large) {
+  width: 24px;
+  height: 24px;
 }
