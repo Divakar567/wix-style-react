@@ -34,6 +34,20 @@ describe('ColorInput', () => {
       (await inputDriver()).keyDown('Enter');
       expect((await inputDriver()).getValue()).toBe('');
     });
+
+    it(`should open ColorPicker when clicked`, async () => {
+      const driver = createDriver(renderColorInput());
+      (await driver.inputDriver()).click();
+      expect((await driver.colorPickerDriver()).exists()).toBe(true);
+    });
+
+    it(`should close ColorPicker when confirmed with Enter`, async () => {
+      const driver = createDriver(renderColorInput());
+      (await driver.inputDriver()).click();
+      (await driver.inputDriver()).keyDown('Enter');
+      expect((await driver.colorPickerDriver()).exists()).toBe(false);
+    });
+
     describe(`error state`, () => {
       it(`should be set when value is empty and input is blurred`, async () => {
         const { inputDriver } = createDriver(renderColorInput({ error: true }));
@@ -83,7 +97,7 @@ describe('ColorInput', () => {
           const { inputDriver } = createDriver(renderColorInput({ onChange }));
           (await inputDriver()).enterText(expectation);
           expect((await inputDriver()).getValue()).toBe(expectation);
-          (await inputDriver()).blur();
+          (await inputDriver()).keyDown('Enter');
           expect(onChange).toHaveBeenCalledTimes(1);
           expect(onChange.mock.calls[0][0]).toBe(output);
         }),
@@ -109,40 +123,28 @@ describe('ColorInput', () => {
       expect((await inputDriver()).hasPrefix()).toBe(true);
     });
 
-    it(`should be visible when value is given but input is blurred`, async () => {
+    it(`should be visible when value is given but input is confirmed with Enter`, async () => {
       const { inputDriver } = createDriver(renderColorInput({ value: '#123' }));
       (await inputDriver()).click();
-      (await inputDriver()).blur();
+      (await inputDriver()).keyDown('Enter');
       expect((await inputDriver()).hasPrefix()).toBe(true);
     });
 
-    it(`should be hidden when value is undefined and input is blurred`, async () => {
+    it(`should be hidden when value is empty and input is confirmed with Enter`, async () => {
       const { inputDriver } = createDriver(renderColorInput());
       (await inputDriver()).click();
-      (await inputDriver()).blur();
+      (await inputDriver()).keyDown('Enter');
       expect((await inputDriver()).hasPrefix()).toBe(false);
     });
   });
 
   describe('suffix ColorViewer', () => {
-    it(`should be null when value is empty string`, async () => {
+    it(`should be null state when value is empty string`, async () => {
       const driver = createDriver(renderColorInput());
       expect(await driver.isViewerNull()).toBe(true);
     });
 
-    it(`should be open ColorPicker when input is clicked`, async () => {
-      const driver = createDriver(renderColorInput());
-      (await driver.inputDriver()).click();
-      expect((await driver.colorPickerDriver()).exists()).toBe(true);
-    });
-    it(`should close ColorPicker onBlur`, async () => {
-      const driver = createDriver(renderColorInput());
-      (await driver.inputDriver()).click();
-      (await driver.inputDriver()).blur();
-      expect((await driver.colorPickerDriver()).exists()).toBe(false);
-    });
-
-    it(`size should be set as given`, async () => {
+    it(`should set size as given`, async () => {
       const driver = createDriver(renderColorInput({ size: 'small' }));
       expect(await driver.getViewerSize()).toBe('small');
     });

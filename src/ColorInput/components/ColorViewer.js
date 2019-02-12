@@ -18,6 +18,7 @@ export class ColorViewer extends React.Component {
       size,
       placement,
       appendTo,
+      onClickOutside,
     } = this.props;
     return (
       <Popover
@@ -26,6 +27,7 @@ export class ColorViewer extends React.Component {
         shown={clicked}
         placement={placement}
         appendTo={appendTo}
+        onClickOutside={onClickOutside}
       >
         <Popover.Element>
           <div

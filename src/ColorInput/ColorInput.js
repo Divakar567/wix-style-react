@@ -57,7 +57,8 @@ class ColorInput extends React.Component {
       value: Color(value).hex(),
     });
 
-  _onPickerCancel = () => this.setState({ value: this.props.value });
+  _onPickerCancel = () =>
+    this.setState({ value: this.props.value, clicked: false });
 
   // Affixes
   _renderPrefix = () => {
@@ -77,7 +78,8 @@ class ColorInput extends React.Component {
         placement={popoverPlacement}
         onChange={this._onPickerChange}
         onCancel={this._onPickerCancel}
-        onConfirm={this._onBlur}
+        onConfirm={this._onClickOutside}
+        onClickOutside={this._onClickOutside}
       />
     );
   };
@@ -96,9 +98,9 @@ class ColorInput extends React.Component {
 
   _onClick = () => this.setState({ clicked: true });
 
-  _onKeyDown = e => e.key === 'Enter' && this._onBlur();
+  _onKeyDown = e => e.key === 'Enter' && this._onClickOutside();
 
-  _onBlur = () => {
+  _onClickOutside = () => {
     const { onChange } = this.props;
     const value = validateHex(this.state.value);
     const callback = () => onChange && onChange(value);
@@ -120,7 +122,6 @@ class ColorInput extends React.Component {
         onChange={this._onChange}
         onInputClicked={this._onClick}
         onFocus={this._onClick}
-        onBlur={this._onBlur}
         disabled={disabled}
         value={value.replace('#', '')}
         prefix={this._renderPrefix()}
