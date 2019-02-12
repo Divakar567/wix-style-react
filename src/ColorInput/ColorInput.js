@@ -16,6 +16,8 @@ class ColorInput extends React.Component {
     placeholder: node,
     /** when set to true this component is disabled */
     disabled: bool,
+    /** sets error state */
+    error: bool,
     /** error message which appears in tooltip */
     errorMessage: node,
     /** input size */
@@ -23,7 +25,7 @@ class ColorInput extends React.Component {
     /** colorpicker popover placement */
     popoverPlacement: oneOf([...placements]),
     /** colorpicker popover calculation to a dom element */
-    popoverAppendTo: oneOf([...placements]),
+    popoverAppendTo: oneOf(['window', 'scrollParent', 'viewport', 'parent']),
     /** input value */
     value: string.isRequired,
     /** input onChange callback */
@@ -32,6 +34,7 @@ class ColorInput extends React.Component {
 
   static defaultProps = {
     placeholder: 'Please choose a color',
+    error: false,
     size: 'medium',
     popoverPlacement: 'bottom',
     popoverAppendTo: 'parent',
@@ -86,7 +89,8 @@ class ColorInput extends React.Component {
   };
 
   _isError = value => {
-    return value === '' ? 'error' : undefined;
+    const { error } = this.props;
+    return value === '' && error ? 'error' : undefined;
   };
 
   _onChange = evt => {

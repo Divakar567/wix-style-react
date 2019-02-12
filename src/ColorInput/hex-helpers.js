@@ -20,5 +20,5 @@ export const validateHex = hex => {
     return hex;
   }
 
-  return '#000000';
+  return '';
 };

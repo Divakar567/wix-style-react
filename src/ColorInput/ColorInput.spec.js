@@ -32,18 +32,18 @@ describe('ColorInput', () => {
       const { inputDriver } = createDriver(renderColorInput());
       (await inputDriver()).enterText('aze');
       (await inputDriver()).keyDown('Enter');
-      expect((await inputDriver()).getValue()).toBe('000000');
+      expect((await inputDriver()).getValue()).toBe('');
     });
     describe(`error state`, () => {
       it(`should be set when value is empty and input is blurred`, async () => {
-        const { inputDriver } = createDriver(renderColorInput());
+        const { inputDriver } = createDriver(renderColorInput({ error: true }));
         (await inputDriver()).click();
         (await inputDriver()).blur();
         expect((await inputDriver()).hasError()).toBe(true);
       });
       it(`should be set when value is deleted`, async () => {
         const text = 'hello';
-        const { inputDriver } = createDriver(renderColorInput());
+        const { inputDriver } = createDriver(renderColorInput({ error: true }));
         (await inputDriver()).enterText(text);
         (await inputDriver()).enterText('');
         expect((await inputDriver()).hasError()).toBe(true);
@@ -69,14 +69,14 @@ describe('ColorInput', () => {
 
     describe('`onChange` prop', () => {
       [
-        ['12', '#000000'],
+        ['12', ''],
         ['123', '#112233'],
-        ['1234', '#000000'],
-        ['12345', '#000000'],
+        ['1234', ''],
+        ['12345', ''],
         ['123456', '#123456'],
-        ['1234$3A74', '#000000'],
+        ['1234$3A74', ''],
         ['1234AB', '#1234AB'],
-        ['%4EB7F', '#000000'],
+        ['%4EB7F', ''],
       ].map(([expectation, output]) =>
         it(`given ${expectation} onChange should return ${output} when blurred`, async () => {
           const onChange = jest.fn();

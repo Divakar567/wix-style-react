@@ -18,6 +18,7 @@ export default {
     dataHook: storySettings.dataHook,
     onChange: value => setState({ value }),
     size: 'medium',
+    error: false,
     errorMessage: '',
     popoverPlacement: 'bottom',
     popoverAppendTo: 'parent',
