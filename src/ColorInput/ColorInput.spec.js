@@ -41,7 +41,7 @@ describe('ColorInput', () => {
         (await inputDriver()).blur();
         expect((await inputDriver()).hasError()).toBe(true);
       });
-      it(`should be set when value is deleted`, async () => {
+      it(`should be still set when value is deleted`, async () => {
         const text = 'hello';
         const { inputDriver } = createDriver(renderColorInput({ error: true }));
         (await inputDriver()).enterText(text);

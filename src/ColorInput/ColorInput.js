@@ -48,7 +48,6 @@ class ColorInput extends React.Component {
         props.value &&
         typeof props.value === 'string' &&
         props.value.toUpperCase(),
-      error: undefined,
     };
   }
 
@@ -88,16 +87,10 @@ class ColorInput extends React.Component {
     return size === 'medium' ? 'normal' : size;
   };
 
-  _isError = value => {
-    const { error } = this.props;
-    return value === '' && error ? 'error' : undefined;
-  };
-
   _onChange = evt => {
     const value = evt.target.value.toUpperCase().replace('#', '');
     this.setState({
       value: value === '' ? '' : `#${value}`,
-      error: this._isError(value),
     });
   };
 
@@ -108,18 +101,17 @@ class ColorInput extends React.Component {
   _onBlur = () => {
     const { onChange } = this.props;
     const value = validateHex(this.state.value);
-    const error = this._isError(value);
     const callback = () => onChange && onChange(value);
-    this.setState({ clicked: false, error, value }, callback);
+    this.setState({ clicked: false, value }, callback);
   };
 
   render() {
     const { dataHook, disabled, placeholder, errorMessage, size } = this.props;
-    const { clicked, error, value } = this.state;
+    const { clicked, value } = this.state;
     const placeHolder = clicked ? undefined : placeholder;
     return (
       <Input
-        status={error}
+        status={this.props.error ? 'error' : undefined}
         statusMessage={errorMessage}
         placeholder={placeHolder}
         dataHook={dataHook}
