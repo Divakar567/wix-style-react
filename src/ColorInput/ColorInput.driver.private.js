@@ -11,13 +11,6 @@ export const colorInputPrivateDriverFactory = base => {
       'disabled',
     )) === 'true';
 
-  const isViewerNull = async () =>
-    (await getStylableState(
-      base.$('[data-hook="colorinput-viewer"]'),
-      viewerStyles,
-      'empty',
-    )) === 'true';
-
   const getViewerSize = async () =>
     await getStylableState(
       base.$('[data-hook="colorinput-viewer"]'),
@@ -27,7 +20,8 @@ export const colorInputPrivateDriverFactory = base => {
   return {
     ...publicDriverFactory(base),
     isHashDisabled: async () => await isHashDisabled(),
-    isViewerNull: async () => await isViewerNull(),
+    isViewerNull: async () =>
+      await base.$('[data-hook="colorinput-viewer-line"]').exists(),
     getViewerSize: async () => await getViewerSize(),
   };
 };

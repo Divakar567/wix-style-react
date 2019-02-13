@@ -1,4 +1,6 @@
 import React from 'react';
+import Color from 'color';
+
 import Popover from '../../Popover';
 import ColorPicker from '../../ColorPicker';
 import styles from './ColorViewer.st.css';
@@ -35,7 +37,12 @@ export class ColorViewer extends React.Component {
             style={{ backgroundColor: value }}
             {...styles('root', { size })}
           >
-            {value === '' && <div {...styles('line', { size })} />}
+            {value === '' && (
+              <div
+                data-hook="colorinput-viewer-line"
+                {...styles('line', { size })}
+              />
+            )}
           </div>
         </Popover.Element>
         <Popover.Content>
@@ -44,7 +51,7 @@ export class ColorViewer extends React.Component {
             showConverter={false}
             showInput={false}
             onCancel={onCancel}
-            onChange={onChange}
+            onChange={hsl => onChange(Color(hsl).hex())}
             onConfirm={onConfirm}
             value={value}
           />

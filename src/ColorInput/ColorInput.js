@@ -51,15 +51,6 @@ class ColorInput extends React.Component {
     };
   }
 
-  // ColorPicker methods
-  _onPickerChange = value =>
-    this.setState({
-      value: Color(value).hex(),
-    });
-
-  _onPickerCancel = () =>
-    this.setState({ value: this.props.value, clicked: false });
-
   // Affixes
   _renderPrefix = () => {
     const { disabled } = this.props;
@@ -76,8 +67,8 @@ class ColorInput extends React.Component {
         clicked={clicked}
         size={this._sizeMapping(size)}
         placement={popoverPlacement}
-        onChange={this._onPickerChange}
-        onCancel={this._onPickerCancel}
+        onChange={this._onChange}
+        onCancel={this._onCancel}
         onConfirm={this._onConfirm}
         onClickOutside={this._onConfirm}
       />
@@ -85,9 +76,7 @@ class ColorInput extends React.Component {
   };
 
   // ColorInput methods
-  _sizeMapping = size => {
-    return size === 'medium' ? 'normal' : size;
-  };
+  _sizeMapping = size => (size === 'medium' ? 'normal' : size);
 
   _onChange = evt => {
     const value = extractHex(evt.target.value);
@@ -98,7 +87,10 @@ class ColorInput extends React.Component {
 
   _onClick = () => this.setState({ clicked: true });
 
-  _onKeyDown = e => e.key === 'Enter' && this._onConfirm();
+  _onKeyDown = e => {
+    e.key === 'Enter' && this._onConfirm();
+    e.key === 'Escape' && this._onPickerCancel();
+  };
 
   _onConfirm = () => {
     const { onChange } = this.props;
@@ -106,6 +98,8 @@ class ColorInput extends React.Component {
     const callback = () => onChange && onChange(value);
     this.setState({ clicked: false, value }, callback);
   };
+
+  _onCancel = () => this.setState({ value: this.props.value, clicked: false });
 
   render() {
     const { dataHook, disabled, placeholder, errorMessage, size } = this.props;
