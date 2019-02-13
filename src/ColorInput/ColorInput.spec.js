@@ -4,6 +4,7 @@ import { createUniDriverFactory } from 'wix-ui-test-utils/uni-driver-factory';
 import ColorInput from './ColorInput';
 import { colorInputPrivateDriverFactory } from './ColorInput.driver.private';
 import { requestAnimationFramePolyfill } from '../../testkit/polyfills';
+import { extractHex } from './hex-helpers';
 
 describe('ColorInput', () => {
   beforeAll(() => {
@@ -32,7 +33,7 @@ describe('ColorInput', () => {
       const { inputDriver } = createDriver(renderColorInput());
       (await inputDriver()).enterText('aze');
       (await inputDriver()).keyDown('Enter');
-      expect((await inputDriver()).getValue()).toBe('');
+      expect((await inputDriver()).getValue()).toBe('AEAEAE');
     });
     it(`should open ColorPicker when clicked`, async () => {
       const driver = createDriver(renderColorInput());
@@ -70,20 +71,27 @@ describe('ColorInput', () => {
     });
     describe('`onChange` prop', () => {
       [
-        ['12', ''],
+        ['', ''],
+        ['1', '#111111'],
+        ['12', '#121212'],
         ['123', '#112233'],
-        ['1234', ''],
-        ['12345', ''],
+        ['1234', '#112233'],
+        ['12345', '#112233'],
         ['123456', '#123456'],
-        ['1234$3A74', ''],
+        ['1234$3A74', '#12343A'],
         ['1234AB', '#1234AB'],
-        ['%4EB7F', ''],
+        ['%4EB7F', '#44EEBB'],
+        ['%##7$39', '#773399'],
+        ['2C45$#74', '#2C4574'],
+        ['4EB7F568A7', '#4EB7F5'],
       ].map(([expectation, output]) =>
         it(`given ${expectation} onChange should return ${output} when confirmed with key`, async () => {
           const onChange = jest.fn();
           const { inputDriver } = createDriver(renderColorInput({ onChange }));
           (await inputDriver()).enterText(expectation);
-          expect((await inputDriver()).getValue()).toBe(expectation);
+          expect((await inputDriver()).getValue()).toBe(
+            extractHex(expectation),
+          );
           (await inputDriver()).keyDown('Enter');
           expect(onChange).toHaveBeenCalledTimes(1);
           expect(onChange.mock.calls[0][0]).toBe(output);

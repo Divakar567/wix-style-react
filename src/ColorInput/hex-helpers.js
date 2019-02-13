@@ -1,24 +1,32 @@
-export const validateHex = hex => {
-  const RE_HEX = /^#?([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/;
+const contains = (...array) => number => array.includes(number);
 
+const hexRules = [
+  {
+    when: contains(1),
+    make: hex => '#' + hex[0].repeat(6),
+  },
+  {
+    when: contains(2),
+    make: hex => '#' + (hex[0] + hex[1]).repeat(3),
+  },
+  {
+    when: contains(3, 4, 5),
+    make: hex => '#' + hex[0].repeat(2) + hex[1].repeat(2) + hex[2].repeat(2),
+  },
+  {
+    when: number => contains(6)(number) || number > 6,
+    make: hex => '#' + hex.slice(0, 6),
+  },
+];
+
+export const validateHex = hex => {
   if (hex === '' || !hex) {
     return hex;
   }
-  if (hex.match(RE_HEX)) {
-    if (hex.replace('#', '').length === 3) {
-      const hexArray = hex.split('');
-      return (
-        hexArray[0] +
-        hexArray[1] +
-        hexArray[1] +
-        hexArray[2] +
-        hexArray[2] +
-        hexArray[3] +
-        hexArray[3]
-      );
-    }
-    return hex;
-  }
+  const hexArray = hex.replace('#', '');
+  const hexLength = hexArray.length;
 
-  return '';
+  return hexRules.find(({ when }) => when(hexLength)).make(hexArray);
 };
+
+export const extractHex = hex => hex.toUpperCase().replace(/[^A-F0-9]/g, '');

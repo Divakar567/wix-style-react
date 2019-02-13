@@ -6,7 +6,7 @@ import { placements } from '../Popover';
 import Input from '../Input';
 import { Hash, ColorViewer } from './components';
 
-import { validateHex } from './hex-helpers';
+import { validateHex, extractHex } from './hex-helpers';
 
 class ColorInput extends React.Component {
   static displayName = 'ColorInput';
@@ -78,8 +78,8 @@ class ColorInput extends React.Component {
         placement={popoverPlacement}
         onChange={this._onPickerChange}
         onCancel={this._onPickerCancel}
-        onConfirm={this._onClickOutside}
-        onClickOutside={this._onClickOutside}
+        onConfirm={this._onConfirm}
+        onClickOutside={this._onConfirm}
       />
     );
   };
@@ -90,7 +90,7 @@ class ColorInput extends React.Component {
   };
 
   _onChange = evt => {
-    const value = evt.target.value.toUpperCase().replace('#', '');
+    const value = extractHex(evt.target.value);
     this.setState({
       value: value === '' ? '' : `#${value}`,
     });
@@ -98,9 +98,9 @@ class ColorInput extends React.Component {
 
   _onClick = () => this.setState({ clicked: true });
 
-  _onKeyDown = e => e.key === 'Enter' && this._onClickOutside();
+  _onKeyDown = e => e.key === 'Enter' && this._onConfirm();
 
-  _onClickOutside = () => {
+  _onConfirm = () => {
     const { onChange } = this.props;
     const value = validateHex(this.state.value);
     const callback = () => onChange && onChange(value);
