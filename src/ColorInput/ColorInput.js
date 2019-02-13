@@ -53,9 +53,13 @@ class ColorInput extends React.Component {
 
   // Affixes
   _renderPrefix = () => {
-    const { disabled } = this.props;
+    const { disabled, size } = this.props;
     const { clicked, value } = this.state;
-    return clicked || value ? <Hash disabled={disabled} /> : undefined;
+    return clicked || value ? (
+      <Hash disabled={disabled} size={this._sizeMapping(size)} />
+    ) : (
+      undefined
+    );
   };
 
   _renderSuffix = () => {
