@@ -20,56 +20,57 @@ describe('ColorInput', () => {
   const createDriver = createUniDriverFactory(colorInputPrivateDriverFactory);
 
   describe('Input ', () => {
-    it('should render Input component', async () => {
-      const { inputDriver } = createDriver(renderColorInput());
-      expect((await inputDriver()).exists()).toBe(true);
-    });
     it('should be in controlled mode when value is passed', async () => {
       const value = 'value';
       const { inputDriver } = createDriver(renderColorInput({ value }));
       expect((await inputDriver()).getValue()).toBe('VALUE');
     });
-    it('keyboard key Enter should fire confirm event', async () => {
-      const { inputDriver } = createDriver(renderColorInput());
-      (await inputDriver()).enterText('aze');
-      (await inputDriver()).keyDown('Enter');
-      expect((await inputDriver()).getValue()).toBe('AEAEAE');
-    });
-    it(`should open ColorPicker when clicked`, async () => {
-      const driver = createDriver(renderColorInput());
-      (await driver.inputDriver()).click();
-      expect((await driver.colorPickerDriver()).exists()).toBe(true);
-    });
-    it(`should close ColorPicker when confirmed with Enter`, async () => {
-      const driver = createDriver(renderColorInput());
-      (await driver.inputDriver()).click();
-      (await driver.inputDriver()).keyDown('Enter');
-      expect((await driver.colorPickerDriver()).exists()).toBe(false);
-    });
-    it(`error state should be set when given`, async () => {
-      const { inputDriver } = createDriver(renderColorInput({ error: true }));
-      (await inputDriver()).click();
-      (await inputDriver()).blur();
-      expect((await inputDriver()).hasError()).toBe(true);
-    });
+
     describe(`value`, () => {
       it(`should convert letters to uppercase while typed`, async () => {
         const { inputDriver } = createDriver(renderColorInput());
         (await inputDriver()).enterText('abc');
         expect((await inputDriver()).getValue()).toBe('ABC');
       });
-      it(`should strip # from pasted value`, async () => {
+      it(`should strip invalid characters from pasted value`, async () => {
         const { inputDriver } = createDriver(renderColorInput());
-        (await inputDriver()).enterText('#abc');
+        (await inputDriver()).enterText('#$%abc');
         expect((await inputDriver()).getValue()).toBe('ABC');
       });
     });
 
-    it(`'size' by default should be medium`, async () => {
-      const { inputDriver } = createDriver(renderColorInput());
-      expect((await inputDriver()).isOfSize('normal')).toBe(true);
+    describe('value is confirmed on', () => {
+      it(`keyboard key 'Enter'`, async () => {
+        const { inputDriver } = createDriver(renderColorInput());
+        (await inputDriver()).enterText('aze');
+        (await inputDriver()).keyDown('Enter');
+        expect((await inputDriver()).getValue()).toBe('AEAEAE');
+      });
+
+      it('click outside', async () => {
+        const driver = createDriver(renderColorInput());
+        (await driver.inputDriver()).click();
+        (await driver.inputDriver()).enterText('aze');
+        (await driver.popoverDriver()).clickOutside();
+        expect((await driver.colorPickerDriver()).exists()).toBe(false);
+      });
     });
-    describe('`onChange` prop', () => {
+
+    describe('value is cancelled on', () => {
+      it(`keyboard key 'Escape'`, async () => {
+        const value = '#123456';
+        const driver = createDriver(renderColorInput({ value }));
+        (await driver.inputDriver()).click();
+        (await driver.inputDriver()).enterText('1234');
+        expect((await driver.inputDriver()).getValue()).toBe('1234');
+        (await driver.inputDriver()).keyDown('Escape');
+        expect((await driver.inputDriver()).getValue()).toBe(
+          value.replace('#', ''),
+        );
+      });
+    });
+
+    describe('confirmed values', () => {
       [
         ['', ''],
         ['1', '#111111'],
@@ -85,7 +86,7 @@ describe('ColorInput', () => {
         ['2C45$#74', '#2C4574'],
         ['4EB7F568A7', '#4EB7F5'],
       ].map(([expectation, output]) =>
-        it(`given ${expectation} onChange should return ${output} when confirmed with key`, async () => {
+        it(`given ${expectation} should return ${output}`, async () => {
           const onChange = jest.fn();
           const { inputDriver } = createDriver(renderColorInput({ onChange }));
           (await inputDriver()).enterText(expectation);
@@ -143,62 +144,122 @@ describe('ColorInput', () => {
       const driver = createDriver(renderColorInput({ size: 'small' }));
       expect(await driver.getViewerSize()).toBe('small');
     });
+  });
 
-    it(`should call onChange when button confirm is clicked`, async () => {
-      const onChange = jest.fn();
-      const driver = createDriver(renderColorInput({ onChange }));
-      (await driver.inputDriver()).click();
-      (await driver.colorPickerDriver()).confirm();
-      expect(onChange).toHaveBeenCalledTimes(1);
-      expect(onChange.mock.calls[0][0]).toBe('');
+  describe('ColorPicker', () => {
+    describe('should open when', () => {
+      it(`input is clicked`, async () => {
+        const driver = createDriver(renderColorInput());
+        (await driver.inputDriver()).click();
+        expect((await driver.colorPickerDriver()).exists()).toBe(true);
+      });
+      it(`input is focused`, async () => {
+        const driver = createDriver(renderColorInput());
+        (await driver.inputDriver()).focus();
+        expect((await driver.colorPickerDriver()).exists()).toBe(true);
+      });
     });
 
-    it(`should set previous confirmed value when button cancel is pressed`, async () => {
-      const value = '#123456';
-      const driver = createDriver(renderColorInput({ value }));
-      (await driver.inputDriver()).click();
-      (await driver.inputDriver()).enterText('1234');
-      expect((await driver.inputDriver()).getValue()).toBe('1234');
-      (await driver.colorPickerDriver()).cancel();
-      expect((await driver.inputDriver()).getValue()).toBe(
-        value.replace('#', ''),
-      );
+    describe('should close when ', () => {
+      it(`input is confirmed with Enter`, async () => {
+        const driver = createDriver(renderColorInput());
+        (await driver.inputDriver()).click();
+        (await driver.inputDriver()).keyDown('Enter');
+        expect((await driver.colorPickerDriver()).exists()).toBe(false);
+      });
+      it(`action button - confirm is clicked`, async () => {
+        const onChange = jest.fn();
+        const driver = createDriver(renderColorInput({ onChange }));
+        (await driver.inputDriver()).click();
+        (await driver.colorPickerDriver()).confirm();
+        expect((await driver.colorPickerDriver()).exists()).toBe(false);
+      });
+    });
+
+    describe('action button', () => {
+      it(`'confirm' should fire confirm event for input`, async () => {
+        const onChange = jest.fn();
+        const driver = createDriver(renderColorInput({ onChange }));
+        (await driver.inputDriver()).click();
+        (await driver.colorPickerDriver()).confirm();
+        expect(onChange).toHaveBeenCalledTimes(1);
+        expect(onChange.mock.calls[0][0]).toBe('');
+      });
+      it(`'cancel' should fire cancel event for input`, async () => {
+        const value = '#123456';
+        const driver = createDriver(renderColorInput({ value }));
+        (await driver.inputDriver()).click();
+        (await driver.inputDriver()).enterText('1234');
+        expect((await driver.inputDriver()).getValue()).toBe('1234');
+        (await driver.colorPickerDriver()).cancel();
+        expect((await driver.inputDriver()).getValue()).toBe(
+          value.replace('#', ''),
+        );
+      });
     });
   });
 
-  describe('`disabled` prop', () => {
-    it('should disable input', async () => {
-      const disabled = true;
-      const { inputDriver } = createDriver(renderColorInput({ disabled }));
-      expect((await inputDriver()).isDisabled()).toBe(true);
+  describe('props', () => {
+    describe('`disabled` prop', () => {
+      it('should disable input', async () => {
+        const disabled = true;
+        const { inputDriver } = createDriver(renderColorInput({ disabled }));
+        expect((await inputDriver()).isDisabled()).toBe(true);
+      });
+
+      it('should disable hash', async () => {
+        const value = '#ffffff';
+        const disabled = true;
+        const driver = createDriver(renderColorInput({ disabled, value }));
+        expect(await driver.isHashDisabled()).toBe(true);
+      });
     });
 
-    it('should disable hash', async () => {
-      const value = '#ffffff';
-      const disabled = true;
-      const driver = createDriver(renderColorInput({ disabled, value }));
-      expect(await driver.isHashDisabled()).toBe(true);
+    describe(`'size' prop`, () => {
+      it(`by default should be medium`, async () => {
+        const { inputDriver } = createDriver(renderColorInput());
+        expect((await inputDriver()).isOfSize('normal')).toBe(true);
+      });
     });
-  });
+    describe(`'placeholder' prop`, () => {
+      const defaultPlaceholder = 'Please choose a color';
 
-  describe(`'placeholder' prop`, () => {
-    const defaultPlaceholder = 'Please choose a color';
+      it(`by default should be defined`, async () => {
+        const { inputDriver } = createDriver(renderColorInput());
+        expect((await inputDriver()).getPlaceholder()).toBe(defaultPlaceholder);
+      });
 
-    it(`by default should be defined`, async () => {
-      const { inputDriver } = createDriver(renderColorInput());
-      expect((await inputDriver()).getPlaceholder()).toBe(defaultPlaceholder);
+      it(`should be equal to given`, async () => {
+        const placeholder = 'Please choose';
+        const { inputDriver } = createDriver(renderColorInput({ placeholder }));
+        expect((await inputDriver()).getPlaceholder()).toBe(placeholder);
+      });
+
+      it(`should be hidden when input is clicked`, async () => {
+        const { inputDriver } = createDriver(renderColorInput());
+        (await inputDriver()).click();
+        expect((await inputDriver()).getPlaceholder()).toBe('');
+      });
+    });
+    describe(`'error' prop`, () => {
+      it(`should be set when true`, async () => {
+        const { inputDriver } = createDriver(renderColorInput({ error: true }));
+        (await inputDriver()).click();
+        (await inputDriver()).blur();
+        expect((await inputDriver()).hasError()).toBe(true);
+      });
     });
 
-    it(`should be equal to given`, async () => {
-      const placeholder = 'Please choose';
-      const { inputDriver } = createDriver(renderColorInput({ placeholder }));
-      expect((await inputDriver()).getPlaceholder()).toBe(placeholder);
-    });
-
-    it(`should be hidden when input is clicked`, async () => {
-      const { inputDriver } = createDriver(renderColorInput());
-      (await inputDriver()).click();
-      expect((await inputDriver()).getPlaceholder()).toBe('');
+    describe('`onChange` prop', () => {
+      it(`should return confirmd value `, async () => {
+        const onChange = jest.fn();
+        const { inputDriver } = createDriver(renderColorInput({ onChange }));
+        (await inputDriver()).enterText('#123');
+        expect((await inputDriver()).getValue()).toBe(extractHex('123'));
+        (await inputDriver()).keyDown('Enter');
+        expect(onChange).toHaveBeenCalledTimes(1);
+        expect(onChange.mock.calls[0][0]).toBe('#112233');
+      });
     });
   });
 });

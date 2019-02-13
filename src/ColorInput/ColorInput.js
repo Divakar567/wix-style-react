@@ -89,7 +89,7 @@ class ColorInput extends React.Component {
 
   _onKeyDown = e => {
     e.key === 'Enter' && this._onConfirm();
-    e.key === 'Escape' && this._onPickerCancel();
+    e.key === 'Escape' && this._onCancel();
   };
 
   _onConfirm = () => {

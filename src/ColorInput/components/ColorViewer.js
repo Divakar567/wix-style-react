@@ -26,6 +26,7 @@ export class ColorViewer extends React.Component {
       <Popover
         showArrow
         fixed
+        dataHook="colorinput-popover"
         shown={clicked}
         placement={placement}
         appendTo={appendTo}
@@ -51,7 +52,7 @@ export class ColorViewer extends React.Component {
             showConverter={false}
             showInput={false}
             onCancel={onCancel}
-            onChange={hsl => onChange(Color(hsl).hex())}
+            onChange={hsl => onChange({ target: { value: Color(hsl).hex() } })}
             onConfirm={onConfirm}
             value={value}
           />

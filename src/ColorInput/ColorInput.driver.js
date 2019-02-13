@@ -1,5 +1,8 @@
 import { baseUniDriverFactory } from 'wix-ui-test-utils/base-driver';
-import { colorPickerTestkitFactory } from '../../testkit';
+import {
+  colorPickerTestkitFactory,
+  popoverTestkitFactory,
+} from '../../testkit';
 import inputDriverFactory from '../Input/Input.driver';
 
 export const colorInputDriverFactory = base => {
@@ -14,9 +17,16 @@ export const colorInputDriverFactory = base => {
       dataHook: 'colorinput-colorpicker',
     });
 
+  const popoverTestkit = element =>
+    popoverTestkitFactory({
+      wrapper: element,
+      dataHook: 'colorinput-popover',
+    });
+
   return {
     ...baseUniDriverFactory(base),
     inputDriver: async () => inputTestkit(await base.getNative()),
     colorPickerDriver: async () => colorPickerTestkit(await base.getNative()),
+    popoverDriver: async () => popoverTestkit(await base.getNative()),
   };
 };
