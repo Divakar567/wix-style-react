@@ -36,8 +36,4 @@ describe('ColorInput', () => {
   eyes.it('should render', async () => {
     await createDriver();
   });
-
-  eyes.it('should render live example', async () => {
-    await createDriver('story-color-input-live-example');
-  });
 });
