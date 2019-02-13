@@ -33,11 +33,10 @@ export class ColorViewer extends React.Component {
           <div
             data-hook="colorinput-viewer"
             style={{ backgroundColor: value }}
-            {...styles('root', {
-              empty: value === '',
-              size,
-            })}
-          />
+            {...styles('root', { size })}
+          >
+            {value === '' && <div {...styles('line', { size })} />}
+          </div>
         </Popover.Element>
         <Popover.Content>
           <ColorPicker

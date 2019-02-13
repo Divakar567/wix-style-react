@@ -1,33 +1,39 @@
 :import {
   -st-from: "wix-ui-core/dist/src/themes/backoffice/colors.st.css";
-  -st-named: D55;
+  -st-named: R00;
 }
 
+:import {
+    -st-from: './pythogoras-mixin';
+    -st-default: calculateWidth
+}
 
 .root {
   -st-states: empty, size(enum(small, medium, large));
+  box-sizing: content-box;
+  position: relative;
   width: 18px;
   height: 18px;
   border-radius: 2px;
-  border: 1px solid value(D55);
+  border: 1px solid rgba(87,112,131, 0.3);
   margin-right: 3px;
-}
-
-.root:empty {
-  background-image: linear-gradient(135deg, transparent 49%, red 49%, red 53%, transparent 53%); 
-}
-
-.root:size(small) {
-  width: 18px;
-  height: 18px;
-}
-
-.root:size(medium) {
-  width: 18px;
-  height: 18px;
 }
 
 .root:size(large) {
   width: 24px;
   height: 24px;
 }
+
+.line {
+  -st-states: size(enum(small, medium, large));
+  -st-mixin: calculateWidth(18,18);
+  position: absolute;
+  border-bottom: 0.5px solid value(R00);
+  transform:translateY(8.5px)translateX(-4px)rotate(-45deg);
+}
+
+.line:size(large) {
+  -st-mixin: calculateWidth(24,24);
+  transform:translateY(12px)translateX(-5.5px)rotate(-45deg);
+}
+
