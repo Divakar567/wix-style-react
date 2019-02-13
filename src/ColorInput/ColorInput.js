@@ -64,13 +64,15 @@ class ColorInput extends React.Component {
 
   _renderSuffix = () => {
     const { value, clicked } = this.state;
-    const { size, popoverPlacement } = this.props;
+    const { size, popoverPlacement, disabled } = this.props;
     return (
       <ColorViewer
         value={value}
         clicked={clicked}
+        disabled={disabled}
         size={this._sizeMapping(size)}
         placement={popoverPlacement}
+        onClick={this._onClick}
         onChange={this._onChange}
         onCancel={this._onCancel}
         onConfirm={this._onConfirm}
@@ -89,7 +91,12 @@ class ColorInput extends React.Component {
     });
   };
 
-  _onClick = () => this.setState({ clicked: true });
+  _onClick = () => {
+    this.input.focus();
+    this.setState({ clicked: true });
+  };
+
+  _onFocus = () => this.setState({ clicked: true });
 
   _onKeyDown = e => {
     e.key === 'Enter' && this._onConfirm();
@@ -111,6 +118,7 @@ class ColorInput extends React.Component {
     const placeHolder = clicked ? undefined : placeholder;
     return (
       <Input
+        ref={input => (this.input = input)}
         status={this.props.error ? 'error' : undefined}
         statusMessage={errorMessage}
         placeholder={placeHolder}
@@ -118,8 +126,8 @@ class ColorInput extends React.Component {
         size={this._sizeMapping(size)}
         onKeyDown={this._onKeyDown}
         onChange={this._onChange}
+        onFocus={this._onFocus}
         onInputClicked={this._onClick}
-        onFocus={this._onClick}
         disabled={disabled}
         value={value.replace('#', '')}
         prefix={this._renderPrefix()}

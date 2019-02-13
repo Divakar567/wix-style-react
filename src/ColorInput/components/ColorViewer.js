@@ -13,7 +13,9 @@ export class ColorViewer extends React.Component {
   render() {
     const {
       value,
+      disabled,
       clicked,
+      onClick,
       onChange,
       onConfirm,
       onCancel,
@@ -35,6 +37,7 @@ export class ColorViewer extends React.Component {
         <Popover.Element>
           <div
             data-hook="colorinput-viewer"
+            onClick={disabled ? undefined : onClick}
             style={{ backgroundColor: value }}
             {...styles('root', { size })}
           >

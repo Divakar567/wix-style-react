@@ -6,6 +6,7 @@ import {
 import inputDriverFactory from '../Input/Input.driver';
 
 export const colorInputDriverFactory = base => {
+  const colorViewerHook = '[data-hook="colorinput-viewer"]';
   const inputTestkit = element =>
     inputDriverFactory({
       element,
@@ -28,5 +29,6 @@ export const colorInputDriverFactory = base => {
     inputDriver: async () => inputTestkit(await base.getNative()),
     colorPickerDriver: async () => colorPickerTestkit(await base.getNative()),
     popoverDriver: async () => popoverTestkit(await base.getNative()),
+    clickColorViewer: async () => base.$(colorViewerHook).click(),
   };
 };

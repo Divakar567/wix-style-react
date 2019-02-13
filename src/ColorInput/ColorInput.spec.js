@@ -158,6 +158,11 @@ describe('ColorInput', () => {
         (await driver.inputDriver()).focus();
         expect((await driver.colorPickerDriver()).exists()).toBe(true);
       });
+      it(`colorviewer is clicked`, async () => {
+        const driver = createDriver(renderColorInput());
+        await driver.clickColorViewer();
+        expect((await driver.colorPickerDriver()).exists()).toBe(true);
+      });
     });
 
     describe('should close when ', () => {
