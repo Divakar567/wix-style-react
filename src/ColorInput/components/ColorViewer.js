@@ -42,10 +42,7 @@ export class ColorViewer extends React.Component {
             {...styles('root', { size })}
           >
             {value === '' && (
-              <div
-                data-hook="colorinput-viewer-line"
-                {...styles('line', { size })}
-              />
+              <div data-hook="colorinput-viewer-line" {...styles('line')} />
             )}
           </div>
         </Popover.Element>

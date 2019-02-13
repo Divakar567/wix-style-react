@@ -6,7 +6,6 @@
 .root {
   -st-states: empty, size(enum(small, medium, large));
   box-sizing: border-box;
-  position: relative;
   width: 18px;
   height: 18px;
   border-radius: 2px;
@@ -14,25 +13,15 @@
   margin-right: 3px;
 }
 
-.root:size(large) {
-  width: 24px;
-  height: 24px;
-}
-
 .line {
-  -st-states: size(enum(small, medium, large));
-  width: 21.5px;
-  position: absolute;
-  border-bottom: 0.5px solid #D6453D;
-  transform: translateY(8.5px)translateX(-4px)rotate(-45deg);
-  left: 1.2px;
-  top: -1.1px;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to top left,
+           rgba(214,69,61,0) 0%,
+           rgba(214,69,61,0) calc(50% - 0.8px),
+           rgba(214,69,61,1) 50%,
+           rgba(214,69,61,0) calc(50% + 0.8px),
+           rgba(214,69,61,0) 100%)
 }
 
-.line:size(large) {
-  width: 30.1px;
-  transform: translateY(11.7px)translateX(-6px)rotate(-45deg);
-  left: 2.6px;
-  top: -1.1px;
-}
 
