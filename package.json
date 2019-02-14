@@ -131,6 +131,7 @@
     "react-docgen": "^2.15.0",
     "react-dom": "^15.5.4",
     "react-element-to-jsx-string": "^13.0.0",
+    "react-lifecycles-compat": "^3.0.4",
     "react-test-renderer": "^15.5.4",
     "react-test-utils": "^0.0.1",
     "react-testing-library": "5.5.2",

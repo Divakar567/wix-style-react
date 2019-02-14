@@ -1,6 +1,7 @@
 import React from 'react';
 import { node, bool, string, func, oneOf } from 'prop-types';
 
+import { polyfill } from 'react-lifecycles-compat';
 import { placements } from '../Popover';
 import Input from '../Input';
 import { Hash, ColorViewer } from './components';
@@ -48,6 +49,15 @@ class ColorInput extends React.Component {
         typeof props.value === 'string' &&
         props.value.toUpperCase(),
     };
+  }
+
+  static getDerivedStateFromProps(props, state) {
+    if (props.value !== state.value) {
+      return {
+        ...state,
+        value: props.value,
+      };
+    }
   }
 
   // Affixes
@@ -134,5 +144,7 @@ class ColorInput extends React.Component {
     );
   }
 }
+
+polyfill(ColorInput);
 
 export default ColorInput;
