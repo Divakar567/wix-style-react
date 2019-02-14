@@ -1,5 +1,4 @@
 import React from 'react';
-import Color from 'color';
 import { node, bool, string, func, oneOf } from 'prop-types';
 
 import { placements } from '../Popover';
@@ -43,7 +42,7 @@ class ColorInput extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      clicked: false,
+      focused: false,
       value:
         props.value &&
         typeof props.value === 'string' &&
@@ -54,8 +53,8 @@ class ColorInput extends React.Component {
   // Affixes
   _renderPrefix = () => {
     const { disabled, size } = this.props;
-    const { clicked, value } = this.state;
-    return clicked || value ? (
+    const { focused, value } = this.state;
+    return focused || value ? (
       <Hash disabled={disabled} size={this._sizeMapping(size)} />
     ) : (
       undefined
@@ -63,12 +62,12 @@ class ColorInput extends React.Component {
   };
 
   _renderSuffix = () => {
-    const { value, clicked } = this.state;
+    const { value, focused } = this.state;
     const { size, popoverPlacement, disabled } = this.props;
     return (
       <ColorViewer
         value={value}
-        clicked={clicked}
+        focused={focused}
         disabled={disabled}
         size={this._sizeMapping(size)}
         placement={popoverPlacement}
@@ -93,10 +92,10 @@ class ColorInput extends React.Component {
 
   _onClick = () => {
     this.input.focus();
-    this.setState({ clicked: true });
+    this.setState({ focused: true });
   };
 
-  _onFocus = () => this.setState({ clicked: true });
+  _onFocus = () => this.setState({ focused: true });
 
   _onKeyDown = e => {
     e.key === 'Enter' && this._onConfirm();
@@ -107,28 +106,27 @@ class ColorInput extends React.Component {
     const { onChange } = this.props;
     const value = validateHex(this.state.value);
     const callback = () => onChange && onChange(value);
-    this.setState({ clicked: false, value }, callback);
+    this.setState({ focused: false, value }, callback);
   };
 
-  _onCancel = () => this.setState({ value: this.props.value, clicked: false });
+  _onCancel = () => this.setState({ value: this.props.value, focused: false });
 
   render() {
-    const { dataHook, disabled, placeholder, errorMessage, size } = this.props;
-    const { clicked, value } = this.state;
-    const placeHolder = clicked ? undefined : placeholder;
+    const { placeholder, errorMessage, size, ...rest } = this.props;
+    const { focused, value } = this.state;
+    const placeHolder = focused ? undefined : placeholder;
     return (
       <Input
+        {...rest}
         ref={input => (this.input = input)}
         status={this.props.error ? 'error' : undefined}
         statusMessage={errorMessage}
         placeholder={placeHolder}
-        dataHook={dataHook}
         size={this._sizeMapping(size)}
         onKeyDown={this._onKeyDown}
         onChange={this._onChange}
         onFocus={this._onFocus}
         onInputClicked={this._onClick}
-        disabled={disabled}
         value={value.replace('#', '')}
         prefix={this._renderPrefix()}
         suffix={this._renderSuffix()}
