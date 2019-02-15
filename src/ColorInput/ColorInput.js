@@ -77,7 +77,7 @@ class ColorInput extends React.Component {
 
   _renderSuffix = () => {
     const { value, focused } = this.state;
-    const { size, popoverPlacement, disabled } = this.props;
+    const { size, popoverPlacement, popoverAppendTo, disabled } = this.props;
     return (
       <ColorViewer
         value={value}
@@ -85,6 +85,7 @@ class ColorInput extends React.Component {
         disabled={disabled}
         size={this._sizeMapping(size)}
         placement={popoverPlacement}
+        appendTo={popoverAppendTo}
         onClick={this._onClick}
         onChange={this._onPickerChange}
         onCancel={this._onCancel}
