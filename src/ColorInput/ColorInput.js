@@ -112,9 +112,9 @@ class ColorInput extends React.Component {
   };
 
   _onConfirm = () => {
-    const { onChange } = this.props;
+    const { onConfirm } = this.props;
     const value = validateHex(this.state.value);
-    const callback = () => onChange && onChange(value);
+    const callback = () => onConfirm && onConfirm(value);
     this.setState({ focused: false, value }, callback);
   };
 

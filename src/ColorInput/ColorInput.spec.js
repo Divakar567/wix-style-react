@@ -13,9 +13,9 @@ describe('ColorInput', () => {
 
   const renderColorInput = ({
     value = '',
-    onChange = () => {},
+    onConfirm = () => {},
     ...rest
-  } = {}) => <ColorInput {...rest} value={value} onChange={onChange} />;
+  } = {}) => <ColorInput {...rest} value={value} onConfirm={onConfirm} />;
 
   const createDriver = createUniDriverFactory(colorInputPrivateDriverFactory);
 
@@ -87,15 +87,15 @@ describe('ColorInput', () => {
         ['4EB7F568A7', '#4EB7F5'],
       ].map(([expectation, output]) =>
         it(`given ${expectation} should return ${output}`, async () => {
-          const onChange = jest.fn();
-          const { inputDriver } = createDriver(renderColorInput({ onChange }));
+          const onConfirm = jest.fn();
+          const { inputDriver } = createDriver(renderColorInput({ onConfirm }));
           (await inputDriver()).enterText(expectation);
           expect((await inputDriver()).getValue()).toBe(
             extractHex(expectation),
           );
           (await inputDriver()).keyDown('Enter');
-          expect(onChange).toHaveBeenCalledTimes(1);
-          expect(onChange.mock.calls[0][0]).toBe(output);
+          expect(onConfirm).toHaveBeenCalledTimes(1);
+          expect(onConfirm.mock.calls[0][0]).toBe(output);
         }),
       );
     });
@@ -173,8 +173,8 @@ describe('ColorInput', () => {
         expect((await driver.colorPickerDriver()).exists()).toBe(false);
       });
       it(`action button - confirm is clicked`, async () => {
-        const onChange = jest.fn();
-        const driver = createDriver(renderColorInput({ onChange }));
+        const onConfirm = jest.fn();
+        const driver = createDriver(renderColorInput({ onConfirm }));
         (await driver.inputDriver()).click();
         (await driver.colorPickerDriver()).confirm();
         expect((await driver.colorPickerDriver()).exists()).toBe(false);
@@ -183,12 +183,12 @@ describe('ColorInput', () => {
 
     describe('action button', () => {
       it(`'confirm' should fire confirm event for input`, async () => {
-        const onChange = jest.fn();
-        const driver = createDriver(renderColorInput({ onChange }));
+        const onConfirm = jest.fn();
+        const driver = createDriver(renderColorInput({ onConfirm }));
         (await driver.inputDriver()).click();
         (await driver.colorPickerDriver()).confirm();
-        expect(onChange).toHaveBeenCalledTimes(1);
-        expect(onChange.mock.calls[0][0]).toBe('');
+        expect(onConfirm).toHaveBeenCalledTimes(1);
+        expect(onConfirm.mock.calls[0][0]).toBe('');
       });
       it(`'cancel' should fire cancel event for input`, async () => {
         const value = '#123456';
@@ -255,15 +255,15 @@ describe('ColorInput', () => {
       });
     });
 
-    describe('`onChange` prop', () => {
+    describe('`onConfirm` prop', () => {
       it(`should return confirmd value `, async () => {
-        const onChange = jest.fn();
-        const { inputDriver } = createDriver(renderColorInput({ onChange }));
+        const onConfirm = jest.fn();
+        const { inputDriver } = createDriver(renderColorInput({ onConfirm }));
         (await inputDriver()).enterText('#123');
         expect((await inputDriver()).getValue()).toBe(extractHex('123'));
         (await inputDriver()).keyDown('Enter');
-        expect(onChange).toHaveBeenCalledTimes(1);
-        expect(onChange.mock.calls[0][0]).toBe('#112233');
+        expect(onConfirm).toHaveBeenCalledTimes(1);
+        expect(onConfirm.mock.calls[0][0]).toBe('#112233');
       });
     });
   });

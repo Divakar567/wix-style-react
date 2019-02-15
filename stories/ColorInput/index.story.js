@@ -23,7 +23,7 @@ export default {
     value: '',
     placeholder: 'Please choose a color',
     dataHook: storySettings.dataHook,
-    onChange: value => setState({ value }),
+    onConfirm: value => setState({ value }),
     size: 'medium',
     error: false,
     errorMessage: '',
