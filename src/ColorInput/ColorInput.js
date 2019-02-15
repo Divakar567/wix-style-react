@@ -51,6 +51,7 @@ class ColorInput extends React.Component {
     if (props.value !== state.value) {
       return {
         ...state,
+        focused: false,
         value:
           props.value &&
           typeof props.value === 'string' &&
@@ -81,7 +82,7 @@ class ColorInput extends React.Component {
         size={this._sizeMapping(size)}
         placement={popoverPlacement}
         onClick={this._onClick}
-        onChange={this._onChange}
+        onChange={this._onPickerChange}
         onCancel={this._onCancel}
         onConfirm={this._onConfirm}
         onClickOutside={this._onConfirm}
@@ -89,7 +90,6 @@ class ColorInput extends React.Component {
     );
   };
 
-  // ColorInput methods
   _sizeMapping = size => (size === 'medium' ? 'normal' : size);
 
   _onChange = evt => {
@@ -97,6 +97,12 @@ class ColorInput extends React.Component {
     this.setState({
       value: value === '' ? '' : `#${value}`,
     });
+  };
+
+  _onPickerChange = value => {
+    const { onPreview } = this.props;
+    const callback = onPreview && onPreview(value);
+    this.setState({ value }, callback);
   };
 
   _onClick = () => {
@@ -118,7 +124,11 @@ class ColorInput extends React.Component {
     this.setState({ focused: false, value }, callback);
   };
 
-  _onCancel = () => this.setState({ value: this.props.value, focused: false });
+  _onCancel = () => {
+    const { onCancel } = this.props;
+    const callback = () => onCancel && onCancel(this.props.value);
+    this.setState({ value: this.props.value, focused: false }, callback);
+  };
 
   render() {
     const { placeholder, errorMessage, size, ...rest } = this.props;

@@ -52,7 +52,7 @@ export class ColorViewer extends React.Component {
             showConverter={false}
             showInput={false}
             onCancel={onCancel}
-            onChange={hsl => onChange({ target: { value: Color(hsl).hex() } })}
+            onChange={hsl => onChange(Color(hsl).hex())}
             onConfirm={onConfirm}
             value={value}
           />

@@ -266,5 +266,19 @@ describe('ColorInput', () => {
         expect(onConfirm.mock.calls[0][0]).toBe('#112233');
       });
     });
+    describe('`onCancel` prop', () => {
+      it(`should return value from props`, async () => {
+        const value = '#555555';
+        const onCancel = jest.fn();
+        const { inputDriver } = createDriver(
+          renderColorInput({ onCancel, value }),
+        );
+        (await inputDriver()).enterText('#123');
+        expect((await inputDriver()).getValue()).toBe(extractHex('123'));
+        (await inputDriver()).keyDown('Escape');
+        expect(onCancel).toHaveBeenCalledTimes(1);
+        expect(onCancel.mock.calls[0][0]).toBe(value);
+      });
+    });
   });
 });
