@@ -6,10 +6,6 @@ import ColorPicker from '../../ColorPicker';
 import styles from './ColorViewer.st.css';
 
 export class ColorViewer extends React.Component {
-  static defaultProps = {
-    placement: 'bottom',
-    appendTo: 'parent',
-  };
   render() {
     const {
       value,
