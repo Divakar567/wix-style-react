@@ -13,9 +13,7 @@ import {
 import { Layout, Cell } from 'wix-style-react/Layout';
 import ColorInput from 'wix-style-react/ColorInput';
 import { placements } from 'wix-style-react/Popover';
-import LiveCodeExample, {
-  baseScope,
-} from '../utils/Components/LiveCodeExample';
+import { baseScope } from '../utils/Components/LiveCodeExample';
 
 import * as examples from './examples';
 import usage from '!raw-loader!./Usage.md';
@@ -87,13 +85,8 @@ export default {
           text: usage,
         }),
 
-        description({
-          text: (
-            <LiveCodeExample
-              initialCode={examples.semicontrolled}
-              autoRender={false}
-            />
-          ),
+        liveCode({
+          source: examples.semicontrolled,
         }),
       ],
     }),

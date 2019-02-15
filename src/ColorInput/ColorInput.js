@@ -55,7 +55,6 @@ class ColorInput extends React.Component {
     if (props.value !== state.value) {
       return {
         ...state,
-        focused: false,
         value:
           props.value &&
           typeof props.value === 'string' &&
@@ -107,7 +106,7 @@ class ColorInput extends React.Component {
   _onPickerChange = value => {
     const { onPreview } = this.props;
     const callback = onPreview && onPreview(value);
-    this.setState({ value }, callback);
+    this.setState({ value, focused: true }, callback);
   };
 
   _onClick = () => {
