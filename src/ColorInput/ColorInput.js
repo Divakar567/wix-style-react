@@ -28,8 +28,12 @@ class ColorInput extends React.Component {
     popoverAppendTo: oneOf(['window', 'scrollParent', 'viewport', 'parent']),
     /** input value */
     value: string.isRequired,
-    /** input onChange callback */
-    onChange: func,
+    /** returns confirmed value */
+    onConfirm: func,
+    /** returns last confirmed value which is props.value */
+    onCancel: func,
+    /** returns colorpicker change value */
+    onPreview: func,
   };
 
   static defaultProps = {
