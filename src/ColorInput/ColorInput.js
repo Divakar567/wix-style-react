@@ -44,10 +44,6 @@ class ColorInput extends React.Component {
     super(props);
     this.state = {
       focused: false,
-      value:
-        props.value &&
-        typeof props.value === 'string' &&
-        props.value.toUpperCase(),
     };
   }
 
@@ -55,7 +51,10 @@ class ColorInput extends React.Component {
     if (props.value !== state.value) {
       return {
         ...state,
-        value: props.value,
+        value:
+          props.value &&
+          typeof props.value === 'string' &&
+          props.value.toUpperCase(),
       };
     }
   }

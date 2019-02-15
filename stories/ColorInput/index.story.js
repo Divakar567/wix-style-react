@@ -1,5 +1,12 @@
 import React from 'react';
 import { storySettings } from './storySettings';
+import {
+  tab,
+  api,
+  playground,
+  description,
+  testkit,
+} from 'wix-storybook-utils/Sections';
 
 import { Layout, Cell } from 'wix-style-react/Layout';
 import ColorInput from 'wix-style-react/ColorInput';
@@ -27,7 +34,7 @@ export default {
 
   componentWrapper: ({ component }) => (
     <Layout>
-      <Cell span={5}>{component}</Cell>
+      <Cell span={6}>{component}</Cell>
     </Layout>
   ),
 
@@ -43,4 +50,26 @@ export default {
       { label: 'null', value: null },
     ],
   },
+
+  sections: [
+    tab({
+      title: 'Description',
+      sections: [],
+    }),
+
+    tab({
+      title: 'Playground',
+      sections: [playground()],
+    }),
+
+    tab({
+      title: 'API',
+      sections: [api()],
+    }),
+
+    tab({
+      title: 'Testkit',
+      sections: [testkit()],
+    }),
+  ],
 };
