@@ -66,7 +66,9 @@ class ColorInput extends React.Component {
     const { disabled, size } = this.props;
     const { focused, value } = this.state;
     return focused || value ? (
-      <Hash disabled={disabled} size={this._sizeMapping(size)} />
+      <Input.Affix>
+        <Hash disabled={disabled} size={this._sizeMapping(size)} />
+      </Input.Affix>
     ) : (
       undefined
     );
