@@ -41,24 +41,22 @@ class ColorInput extends React.Component {
     error: false,
     size: 'medium',
     popoverPlacement: 'bottom',
-    popoverAppendTo: 'parent',
+    popoverAppendTo: 'window',
   };
 
   constructor(props) {
     super(props);
     this.state = {
       focused: false,
+      value: '',
     };
   }
 
   static getDerivedStateFromProps(props, state) {
-    if (props.value !== state.value) {
+    if (props.value !== state.value && state.focused === false) {
       return {
         ...state,
-        value:
-          props.value &&
-          typeof props.value === 'string' &&
-          props.value.toUpperCase(),
+        value: props.value.toUpperCase(),
       };
     }
   }
