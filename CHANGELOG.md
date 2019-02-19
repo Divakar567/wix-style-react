@@ -18,7 +18,11 @@ Types of changes:
 
 ### Added
 
-- <Search /> - allow filtering options using custom predicate [#2907](https://github.com/wix/wix-style-react/pull/2907)
+- `<Search />` - allow filtering options using custom predicate [#2907](https://github.com/wix/wix-style-react/pull/2907)
+
+### Fixed
+
+- `<SortableList />` - fix hover bug [#2923](https://github.com/wix/wix-style-react/pull/2923)
 
 ## 6.4.0 - 2019-02-18
 
