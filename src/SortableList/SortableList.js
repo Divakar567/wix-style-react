@@ -260,7 +260,9 @@ export default class SortableList extends WixComponent {
           <div className={contentClassName}>
             {this.state.items.map((item, index) => (
               <Draggable
-                listOfPropsThatAffectItems={this.props.listOfPropsThatAffectItems}
+                listOfPropsThatAffectItems={
+                  this.props.listOfPropsThatAffectItems
+                }
                 key={`${item.id}-${containerId}`}
                 shift={this.state.animationShifts[index]}
                 hasDragged={

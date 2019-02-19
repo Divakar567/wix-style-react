@@ -108,7 +108,7 @@ const collect = (connect, monitor) => ({
 export default class DraggableSource extends React.Component {
   state = {
     offsetOfHandle: { x: 0, y: 0 },
-    itemWidth: null
+    itemWidth: null,
   };
 
   rootNode = null;
@@ -196,7 +196,7 @@ export default class DraggableSource extends React.Component {
             });
             return connectDragSource(handleWithRef);
           },
-        delayed,
+          delayed,
         })
       : connectDragSource(
           renderItem({
@@ -215,16 +215,16 @@ export default class DraggableSource extends React.Component {
     // Don't need to reset the values if node remains the same
     if (node && this.rootNode !== node) {
       this.rootNode = node;
-      this.setState({itemWidth: this.rootNode.getBoundingClientRect().width});
+      this.setState({ itemWidth: this.rootNode.getBoundingClientRect().width });
     }
-  }
+  };
 
   _renderPreview = ({ previewStyles }) => {
     const { renderItem, id, item, delayed } = this.props;
     return renderItem({
       id,
       item,
-      previewStyles: {width: this.state.itemWidth, ...previewStyles},
+      previewStyles: { width: this.state.itemWidth, ...previewStyles },
       isPreview: true,
       connectHandle: noop,
       delayed,
