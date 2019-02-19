@@ -41,7 +41,7 @@ class ColorInput extends React.Component {
     error: false,
     size: 'medium',
     popoverPlacement: 'bottom',
-    popoverAppendTo: 'window',
+    popoverAppendTo: 'parent',
   };
 
   constructor(props) {
