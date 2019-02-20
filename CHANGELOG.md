@@ -20,13 +20,30 @@ Types of changes:
 
 - `<Search />` - allow filtering options using custom predicate [#2907](https://github.com/wix/wix-style-react/pull/2907)
 
-### Docs
-
-- `<Page/>` (Docs): Write new UX Page Layout story [#2981](https://github.com/wix/wix-style-react/pull/2981)
-
 ### Fixed
 
-- `<SortableList />` - fix hover bug [#2923](https://github.com/wix/wix-style-react/pull/2923)
+- `<DropdownLayout />` - fix double scrollbar issue [#2969](https://github.com/wix/wix-style-react/pull/2969)
+- `<SortableList/>` - fix hover event bug [#2923](https://github.com/wix/wix-style-react/pull/2923)
+- `<Input/>` - fix disabled ticker color [#2986](https://github.com/wix/wix-style-react/pull/2986)
+- `<TimeInput/>` - Fix cut text [#2970](https://github.com/wix/wix-style-react/pull/2970)
+
+### Docs
+- `<TextField/>` -  rename docs page to `TextInput` [#2977](https://github.com/wix/wix-style-react/pull/2977)
+- `<TextArea/>` - refactor story page based on new design [#2975](https://github.com/wix/wix-style-react/pull/2975)
+- `<TextInput/>` - improve docs structuring [#2988](https://github.com/wix/wix-style-react/pull/2988)
+- `<TextArea/>` - improve documentations after UX review [#2987](https://github.com/wix/wix-style-react/pull/2987)
+- `<Input/>` - remove tabs from examples [#2985](https://github.com/wix/wix-style-react/pull/2985)
+- `<Page/>` -  Write new UX Page Layout story [#2981](https://github.com/wix/wix-style-react/pull/2981)
+
+### Changed
+- infra: improve build process. Migrate to `babel@7` [#2868](https://github.com/wix/wix-style-react/pull/2868)
+
+### Labe
+- `<NoBorderInput/>` - add new component [#2948](https://github.com/wix/wix-style-react/pull/2948)
+
+### Deprecated
+
+- `<RichTextAreaComposite />` - deprecated component, you should use a composition of <RichTextArea/> and <FormField/> [#2997](https://github.com/wix/wix-style-react/pull/2997)
 
 ## 6.4.0 - 2019-02-18
 
