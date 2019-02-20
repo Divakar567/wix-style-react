@@ -43,7 +43,7 @@ describe('Tooltip', () => {
       });
     });
 
-    it.only('should hide when mouse leaving', async () => {
+    it('should hide when mouse leaving', async () => {
       const { driver } = render(
         <Tooltip dataHook="tooltip" {..._props}>
           {children}
