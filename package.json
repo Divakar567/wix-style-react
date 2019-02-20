@@ -218,7 +218,7 @@
     "testPathIgnorePatterns": [
       "<rootDir>/dist/",
       "<rootDir>/node_modules/",
-      "<rootDir>/test/e2e-runtime",
+      "<rootDir>/test-runtime/",
       "<rootDir>/scripts/component-generator/templates/"
     ]
   },
