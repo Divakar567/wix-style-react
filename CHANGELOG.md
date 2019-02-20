@@ -20,6 +20,10 @@ Types of changes:
 
 - `<Search />` - allow filtering options using custom predicate [#2907](https://github.com/wix/wix-style-react/pull/2907)
 
+### Docs
+
+- `<Page/>` (Docs): Write new UX Page Layout story [#2981](https://github.com/wix/wix-style-react/pull/2981)
+
 ### Fixed
 
 - `<SortableList />` - fix hover bug [#2923](https://github.com/wix/wix-style-react/pull/2923)

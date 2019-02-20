@@ -414,3 +414,9 @@ import { floatingNotificationDriverFactory } from '../src/FloatingNotification/F
 export const floatingNotificationTestkitFactory = protractorUniTestkitFactoryCreator(
   floatingNotificationDriverFactory,
 );
+
+import { noBorderInputDriverFactory } from '../src/NoBorderInput/NoBorderInput.protractor.driver';
+
+export const noBorderInputTestkitFactory = protractorTestkitFactoryCreator(
+  noBorderInputDriverFactory,
+);

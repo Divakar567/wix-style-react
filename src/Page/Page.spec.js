@@ -167,7 +167,9 @@ describe('Page', () => {
 
       createDriver(page);
       expect(stub).toHaveBeenCalledWith(
-        `${prefixWarning}Page: Invalid Prop children, must contain Page.Content${suffixWarning}`,
+        expect.stringContaining(
+          `${prefixWarning}Page: Invalid Prop children, must contain Page.Content${suffixWarning}`,
+        ),
       );
     });
 
@@ -183,7 +185,9 @@ describe('Page', () => {
 
       createDriver(page);
       expect(stub).toHaveBeenCalledWith(
-        `${prefixWarning}Page: Invalid Prop children, must contain Page.Header${suffixWarning}`,
+        expect.stringContaining(
+          `${prefixWarning}Page: Invalid Prop children, must contain Page.Header${suffixWarning}`,
+        ),
       );
     });
 
@@ -200,7 +204,9 @@ describe('Page', () => {
 
       createDriver(page);
       expect(stub).toHaveBeenCalledWith(
-        `${prefixWarning}Page: Invalid Prop children, unknown child div${suffixWarning}`,
+        expect.stringContaining(
+          `${prefixWarning}Page: Invalid Prop children, unknown child div${suffixWarning}`,
+        ),
       );
     });
   });

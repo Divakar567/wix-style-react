@@ -12,13 +12,25 @@ import {
 } from 'wix-ui-test-utils/vanilla';
 
 const load = path => {
-  const item = require(path);
+  const MODULE_META_KEYS = ['__esModule'];
 
-  return item.default
-    ? item.default
-    : Object.keys(item).length === 1
-    ? Object.values(item)[0]
-    : item;
+  const item = require(path);
+  const moduleFields = Object.keys(item).reduce((total, key) => {
+    if (!MODULE_META_KEYS.includes(key)) {
+      return total.concat(item[key]);
+    }
+    return total;
+  }, []);
+
+  let defaultOrFirstExport;
+  if (item.default) {
+    defaultOrFirstExport = item.default;
+  } else if (moduleFields.length === 1) {
+    defaultOrFirstExport = moduleFields[0];
+  } else {
+    defaultOrFirstExport = item;
+  }
+  return defaultOrFirstExport;
 };
 
 export const addItemTestkitFactory = testkitFactoryCreator(load('../src/AddItem/AddItem.driver'));
@@ -70,6 +82,7 @@ export const modalSelectorLayoutTestkitFactory = testkitFactoryCreator(load('../
 export const multiSelectTestkitFactory = testkitFactoryCreator(load('../src/MultiSelect/MultiSelect.driver'));
 export const multiSelectCheckboxTestkitFactory = testkitFactoryCreator(load('../src/MultiSelectCheckbox/MultiSelectCheckbox.driver'));
 export const multiSelectCompositeTestkitFactory = testkitFactoryCreator(load('../src/MultiSelectComposite/MultiSelectComposite.driver'));
+export const noBorderInputTestkitFactory = testkitFactoryCreator(load('../src/NoBorderInput/NoBorderInput.driver'));
 export const notificationTestkitFactory = testkitFactoryCreator(load('../src/Notification/Notification.driver'));
 export const pageTestkitFactory = testkitFactoryCreator(load('../src/Page/Page.driver'));
 export const pageHeaderTestkitFactory = testkitFactoryCreator(load('../src/PageHeader/PageHeader.driver'));
