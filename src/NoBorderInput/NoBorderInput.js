@@ -27,7 +27,6 @@ class NoBorderInput extends React.Component {
       statusMessage,
       className,
       value,
-      withSelection,
     } = this.props;
 
     const rejectedProps = [
@@ -68,7 +67,7 @@ class NoBorderInput extends React.Component {
         className={classNames(
           conditionalClasses,
           styles.root,
-          inputStyles[`size-${size}${withSelection ? '-with-selection' : ''}`],
+          inputStyles[`size-${size}`],
           className,
         )}
         data-hook={dataHook}
