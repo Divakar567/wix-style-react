@@ -175,18 +175,18 @@ describe('Tooltip', () => {
 
     it('should have a content', async () => {
       const { driver } = render(<Tooltip {..._props}>{children}</Tooltip>);
-      driver.mouseEnter();
-      return resolveIn(30).then(async () => {
+      await driver.mouseEnter();
+      await eventually(async () => {
         expect(await driver.getContent()).toBe("I'm the content");
       });
     });
 
     it('should cancel mouse leave, when followed by mouse enter immediately', async () => {
       const { driver } = render(<Tooltip {..._props}>{children}</Tooltip>);
-      driver.mouseEnter();
-      driver.mouseLeave();
-      driver.mouseEnter();
-      return resolveIn(30).then(async () => {
+      await driver.mouseEnter();
+      await driver.mouseLeave();
+      await driver.mouseEnter();
+      await eventually(async () => {
         expect(await driver.isShown()).toBe(true);
       });
     });
@@ -197,43 +197,49 @@ describe('Tooltip', () => {
         <Tooltip {...{ ..._props, onShow }}>{children}</Tooltip>,
       );
 
-      driver.mouseEnter();
+      await driver.mouseEnter();
 
       expect(onShow).not.toHaveBeenCalled();
-      return resolveIn(30).then(async () => {
+
+      await eventually(async () => {
         expect(onShow).toHaveBeenCalled();
-        expect(await driver.isShown()).toBeTruthy();
+        expect(await driver.isShown()).toBe(true);
       });
     });
 
     it('should call onHide when tooltip is hidden', async () => {
       const onHide = jest.fn();
+
       const { driver } = render(
         <Tooltip {...{ ..._props, onHide }}>{children}</Tooltip>,
       );
 
-      driver.mouseEnter();
-      return resolveIn(30).then(async () => {
-        expect(await driver.isShown()).toBeTruthy();
+      await driver.mouseEnter();
 
-        driver.mouseLeave();
+      await eventually(async () => {
+        expect(await driver.isShown()).toBe(true);
+      });
 
-        return resolveIn(30).then(async () => {
-          expect(await driver.isShown()).toBeFalsy();
-          expect(onHide).toHaveBeenCalled();
-        });
+      await driver.mouseLeave();
+
+      await eventually(async () => {
+        expect(await driver.isShown()).toBe(false);
+        expect(onHide).toHaveBeenCalled();
       });
     });
 
     it('should append to element selected', async () => {
       const el = document.createElement('div');
+
       const { driver } = render(
         <Tooltip {..._props} appendTo={el}>
           {children}
         </Tooltip>,
       );
-      driver.mouseEnter();
-      return resolveIn(30).then(() => {
+
+      await driver.mouseEnter();
+
+      await eventually(async () => {
         expect(el.childElementCount).toEqual(1);
       });
     });
@@ -247,18 +253,21 @@ describe('Tooltip', () => {
           children,
         };
         const { driver, rerender } = render(<Tooltip {...props} />);
-        driver.mouseEnter();
-        await eventually(async () =>
-          expect(await driver.isShown()).toBeFalsy(),
-        );
-        rerender(<Tooltip {...props} active />);
+
+        await driver.mouseEnter();
 
         await eventually(async () =>
-          expect(await driver.isShown()).toBeTruthy(),
+          expect(await driver.isShown()).toBe(false),
         );
+
+        rerender(<Tooltip {...props} active />);
+
+        await eventually(async () => expect(await driver.isShown()).toBe(true));
+
         rerender(<Tooltip {...props} active={false} />);
+
         await eventually(async () =>
-          expect(await driver.isShown()).toBeFalsy(),
+          expect(await driver.isShown()).toBe(false),
         );
       });
 
@@ -272,12 +281,12 @@ describe('Tooltip', () => {
           children,
         };
         const { driver, rerender } = render(<Tooltip {...props} />);
-        expect(await driver.isShown()).toBeFalsy();
-        await eventually(async () =>
-          expect(await driver.isShown()).toBeFalsy(),
-        );
+
+        expect(await driver.isShown()).toBe(false);
+
         rerender(<Tooltip {...props} active disabled />);
-        expect(await driver.isShown()).toBeFalsy();
+
+        expect(await driver.isShown()).toBe(false);
       });
 
       it('should close tooltip when disabled changed to true when was active true before', async () => {
@@ -290,77 +299,29 @@ describe('Tooltip', () => {
           children,
         };
         const { driver, rerender } = render(<Tooltip {...props} />);
-        await eventually(async () =>
-          expect(await driver.isShown()).toBeTruthy(),
-        );
+
+        await eventually(async () => expect(await driver.isShown()).toBe(true));
+
         rerender(<Tooltip {...props} disabled />);
+
         await eventually(async () =>
-          expect(await driver.isShown()).toBeFalsy(),
+          expect(await driver.isShown()).toBe(false),
         );
       });
     });
 
     describe('placement attribute', () => {
-      it('should be top by default', async () => {
-        const { driver } = render(
-          <Tooltip {...{ ..._props }}>{children}</Tooltip>,
-        );
-        driver.mouseEnter();
-
-        return resolveIn(30).then(async () => {
-          expect(await driver.getPlacement()).toBe('top');
-        });
-      });
-
-      it(`should be bottom`, async () => {
-        const { driver } = render(
-          <Tooltip {...{ ..._props }} placement="bottom">
-            {children}
-          </Tooltip>,
-        );
-        driver.mouseEnter();
-
-        return resolveIn(30).then(async () => {
-          expect(await driver.getPlacement()).toBe('bottom');
-        });
-      });
-
-      it(`should be top`, async () => {
-        const { driver } = render(
-          <Tooltip {...{ ..._props }} placement="top">
-            {children}
-          </Tooltip>,
-        );
-        driver.mouseEnter();
-
-        return resolveIn(30).then(async () => {
-          expect(await driver.getPlacement()).toBe('top');
-        });
-      });
-
-      it(`should be left`, async () => {
-        const { driver } = render(
-          <Tooltip {...{ ..._props }} placement="left">
-            {children}
-          </Tooltip>,
-        );
-        driver.mouseEnter();
-
-        return resolveIn(30).then(async () => {
-          expect(await driver.getPlacement()).toBe('left');
-        });
-      });
-
-      it(`should be right`, async () => {
-        const { driver } = render(
-          <Tooltip {...{ ..._props }} placement="right">
-            {children}
-          </Tooltip>,
-        );
-        driver.mouseEnter();
-
-        return resolveIn(30).then(async () => {
-          expect(await driver.getPlacement()).toBe('right');
+      ['top', 'bottom', 'left', 'right'].map(place => {
+        it(`should set ${place}`, async () => {
+          const { driver } = render(
+            <Tooltip {..._props} placement={place}>
+              {children}
+            </Tooltip>,
+          );
+          await driver.mouseEnter();
+          await eventually(async () => {
+            expect(await driver.getPlacement()).toBe(place);
+          });
         });
       });
     });
@@ -368,8 +329,8 @@ describe('Tooltip', () => {
     describe('maxWidth attribute', () => {
       it('should set default maxWidth 204', async () => {
         const { driver } = render(<Tooltip {..._props}>{children}</Tooltip>);
-        driver.mouseEnter();
-        return resolveIn(30).then(async () => {
+        await driver.mouseEnter();
+        await eventually(async () => {
           expect(await driver.getMaxWidth()).toBe('204px');
         });
       });
@@ -377,8 +338,8 @@ describe('Tooltip', () => {
       it('should set custom maxWidth', async () => {
         const props = { ..._props, maxWidth: '400px' };
         const { driver } = render(<Tooltip {...props}>{children}</Tooltip>);
-        driver.mouseEnter();
-        return resolveIn(30).then(async () => {
+        await driver.mouseEnter();
+        await eventually(async () => {
           expect(await driver.getMaxWidth()).toBe('400px');
         });
       });
@@ -387,8 +348,10 @@ describe('Tooltip', () => {
     describe('minWidth attribute', () => {
       it('should not have any min-width as default', async () => {
         const { driver } = render(<Tooltip {..._props}>{children}</Tooltip>);
-        driver.mouseEnter();
-        return resolveIn(30).then(async () => {
+
+        await driver.mouseEnter();
+
+        await eventually(async () => {
           expect(await driver.getMinWidth()).toBe(undefined);
         });
       });
@@ -396,8 +359,10 @@ describe('Tooltip', () => {
       it('should set custom min-width', async () => {
         const props = { ..._props, minWidth: '150px' };
         const { driver } = render(<Tooltip {...props}>{children}</Tooltip>);
-        driver.mouseEnter();
-        return resolveIn(30).then(async () => {
+
+        await driver.mouseEnter();
+
+        await eventually(async () => {
           expect(await driver.getMinWidth()).toBe('150px');
         });
       });
@@ -406,8 +371,10 @@ describe('Tooltip', () => {
     describe('alignment attribute', () => {
       it('should set default left', async () => {
         const { driver } = render(<Tooltip {..._props}>{children}</Tooltip>);
-        driver.mouseEnter();
-        return resolveIn(30).then(async () => {
+
+        await driver.mouseEnter();
+
+        await eventually(async () => {
           expect(await driver.getAlignment()).toBe('left');
         });
       });
@@ -416,16 +383,18 @@ describe('Tooltip', () => {
     describe('padding attribute', () => {
       it('should set default to none', async () => {
         const { driver } = render(<Tooltip {..._props}>{children}</Tooltip>);
-        driver.mouseEnter();
-        return resolveIn(30).then(async () => {
+
+        await driver.mouseEnter();
+
+        await eventually(async () => {
           expect(await driver.getPadding()).toBe(undefined);
         });
       });
       it('should set custom padding', async () => {
         const props = { ..._props, padding: '5px' };
         const { driver } = render(<Tooltip {...props}>{children}</Tooltip>);
-        driver.mouseEnter();
-        return resolveIn(30).then(async () => {
+        await driver.mouseEnter();
+        await eventually(async () => {
           expect(await driver.getPadding()).toBe('5px');
         });
       });
@@ -439,9 +408,9 @@ describe('Tooltip', () => {
 
       it('should have an arrow by default', async () => {
         const { driver } = render(<Tooltip {...props}>{children}</Tooltip>);
-        driver.mouseEnter();
-        return resolveIn(30).then(async () => {
-          expect(await driver.hasArrow()).toBeTruthy();
+        await driver.mouseEnter();
+        await eventually(async () => {
+          expect(await driver.hasArrow()).toBe(true);
         });
       });
 
@@ -451,9 +420,9 @@ describe('Tooltip', () => {
             {children}
           </Tooltip>,
         );
-        driver.mouseEnter();
-        return resolveIn(30).then(async () => {
-          expect(await driver.hasArrow()).toBeFalsy();
+        await driver.mouseEnter();
+        await eventually(async () => {
+          expect(await driver.hasArrow()).toBe(false);
         });
       });
     });
@@ -465,10 +434,9 @@ describe('Tooltip', () => {
             {children}
           </Tooltip>,
         );
-        driver.click();
-        expect(await driver.isShown()).toBeFalsy();
-        return resolveIn(30).then(async () => {
-          expect(await driver.isShown()).toBeTruthy();
+        await driver.click();
+        await eventually(async () => {
+          expect(await driver.isShown()).toBe(true);
         });
       });
 
@@ -478,14 +446,16 @@ describe('Tooltip', () => {
             {children}
           </Tooltip>,
         );
-        driver.click();
-        expect(await driver.isShown()).toBeFalsy();
-        return resolveIn(30).then(async () => {
-          expect(await driver.isShown()).toBeTruthy();
-          driver.click();
-          return resolveIn(30).then(async () => {
-            expect(await driver.isShown()).toBeFalsy();
-          });
+
+        await driver.click();
+
+        await eventually(async () => {
+          expect(await driver.isShown()).toBe(true);
+        });
+
+        await driver.click();
+        await eventually(async () => {
+          expect(await driver.isShown()).toBe(false);
         });
       });
     });
@@ -496,25 +466,27 @@ describe('Tooltip', () => {
           {children}
         </Tooltip>,
       );
-      driver.mouseEnter();
-      expect(await driver.isShown()).toBeFalsy();
-      return resolveIn(30).then(async () => {
-        expect(await driver.isShown()).toBeTruthy();
+
+      await driver.mouseEnter();
+
+      await eventually(async () => {
+        expect(await driver.isShown()).toBe(true);
         expect(await driver.getContent()).toBe("I'm the content");
-        expect(await driver.hasLightTheme()).toBeTruthy();
+        expect(await driver.hasLightTheme()).toBe(true);
         expect(await driver.getPlacement()).toBe('top');
       });
     });
-    describe('themse', () => {
+
+    describe('theme', () => {
       it('should have dark theme when appendToParent', async () => {
         const { driver } = render(
           <Tooltip {..._props} appendToParent theme="dark">
             {children}
           </Tooltip>,
         );
-        driver.mouseEnter();
-        return resolveIn(30).then(async () => {
-          expect(await driver.hasDarkTheme()).toBeTruthy();
+        await driver.mouseEnter();
+        await eventually(async () => {
+          expect(await driver.hasDarkTheme()).toBe(true);
         });
       });
 
@@ -524,9 +496,9 @@ describe('Tooltip', () => {
             {children}
           </Tooltip>,
         );
-        driver.mouseEnter();
-        return resolveIn(30).then(async () => {
-          expect(await driver.hasErrorTheme()).toBeTruthy();
+        await driver.mouseEnter();
+        await eventually(async () => {
+          expect(await driver.hasErrorTheme()).toBe(true);
         });
       });
     });
@@ -549,10 +521,10 @@ describe('Tooltip', () => {
             <Button />
           </Tooltip>,
         );
-        driver.mouseEnter();
+        await driver.mouseEnter();
 
         await eventually(async () => {
-          expect(await driver.isShown()).toBeTruthy();
+          expect(await driver.isShown()).toBe(true);
         });
       });
 
@@ -564,11 +536,11 @@ describe('Tooltip', () => {
           <Tooltip {...defaultProps} dataHook="secondTooltip" />,
         );
 
-        firstTooltipDriver.mouseEnter();
+        await firstTooltipDriver.mouseEnter();
 
-        await eventually(() => {
-          expect(firstTooltipDriver.isShown()).toBeTruthy();
-          expect(secondTooltipDriver.isShown()).toBeFalsy();
+        await eventually(async () => {
+          expect(await firstTooltipDriver.isShown()).toBe(true);
+          expect(await secondTooltipDriver.isShown()).toBe(false);
         });
       });
 
@@ -580,11 +552,11 @@ describe('Tooltip', () => {
           <Tooltip {...defaultProps} />,
         );
 
-        firstTooltipDriver.mouseEnter();
+        await firstTooltipDriver.mouseEnter();
 
-        await eventually(() => {
-          expect(firstTooltipDriver.isShown()).toBeTruthy();
-          expect(secondTooltipDriver.isShown()).toBeFalsy();
+        await eventually(async () => {
+          expect(await firstTooltipDriver.isShown()).toBe(true);
+          expect(await secondTooltipDriver.isShown()).toBe(false);
         });
       });
 
@@ -608,10 +580,8 @@ describe('Tooltip', () => {
           <Tooltip {...defaultProps} dataHook="firstDataHook" />,
         );
 
-        driver.mouseEnter();
-        await eventually(async () =>
-          expect(await driver.isShown()).toBeTruthy(),
-        );
+        await driver.mouseEnter();
+        await eventually(async () => expect(await driver.isShown()).toBe(true));
 
         const contentHook1 = container
           .querySelector(`[data-content-hook]`)
@@ -620,18 +590,19 @@ describe('Tooltip', () => {
 
         expect(
           document.body.querySelector(`[data-hook="${contentHook1}"]`),
-        ).toBeTruthy();
+        ).toBe(true);
 
-        driver.mouseLeave();
+        await driver.mouseLeave();
+
         await eventually(async () =>
-          expect(await driver.isShown()).toBeFalsy(),
+          expect(await driver.isShown()).toBe(false),
         );
 
         rerender(<Tooltip {...defaultProps} dataHook="secondDataHook" />);
-        driver.mouseEnter();
-        await eventually(async () =>
-          expect(await driver.isShown()).toBeTruthy(),
-        );
+
+        await driver.mouseEnter();
+
+        await eventually(async () => expect(await driver.isShown()).toBe(true));
 
         const contentHook2 = container
           .querySelector(`[data-content-hook]`)
@@ -640,7 +611,7 @@ describe('Tooltip', () => {
 
         expect(
           document.body.querySelector(`[data-hook="${contentHook2}"]`),
-        ).toBeTruthy();
+        ).toBe(true);
       });
 
       it('should differentiate between different tooltips for all related driver methods', async () => {
@@ -671,33 +642,33 @@ describe('Tooltip', () => {
           />,
         );
 
-        firstDriver.click();
-        secondDriver.click();
-        thirdDriver.click();
+        await firstDriver.click();
+        await secondDriver.click();
+        await thirdDriver.click();
 
-        await eventually(() => {
-          expect(firstDriver.isShown()).toBeTruthy();
-          expect(secondDriver.isShown()).toBeTruthy();
-          expect(thirdDriver.isShown()).toBeTruthy();
+        await eventually(async () => {
+          expect(await await firstDriver.isShown()).toBe(true);
+          expect(await await secondDriver.isShown()).toBe(true);
+          expect(await await thirdDriver.isShown()).toBe(true);
         });
 
-        expect(firstDriver.hasErrorTheme()).toBeTruthy();
-        expect(firstDriver.hasDarkTheme()).toBeFalsy();
-        expect(firstDriver.hasLightTheme()).toBeFalsy();
-        expect(firstDriver.hasAnimationClass()).toBeTruthy();
-        expect(firstDriver.hasArrow()).toBeTruthy();
-        expect(firstDriver.getPlacement()).toBe('top');
+        expect(await firstDriver.hasErrorTheme()).toBe(true);
+        expect(await firstDriver.hasDarkTheme()).toBe(false);
+        expect(await firstDriver.hasLightTheme()).toBe(false);
+        expect(await firstDriver.hasAnimationClass()).toBe(true);
+        expect(await firstDriver.hasArrow()).toBe(true);
+        expect(await firstDriver.getPlacement()).toBe('top');
 
-        expect(secondDriver.hasErrorTheme()).toBeFalsy();
-        expect(secondDriver.hasDarkTheme()).toBeTruthy();
-        expect(secondDriver.hasLightTheme()).toBeFalsy();
-        expect(secondDriver.getPlacement()).toBe('bottom');
+        expect(await secondDriver.hasErrorTheme()).toBe(false);
+        expect(await secondDriver.hasDarkTheme()).toBe(true);
+        expect(await secondDriver.hasLightTheme()).toBe(false);
+        expect(await secondDriver.getPlacement()).toBe('bottom');
 
-        expect(thirdDriver.hasErrorTheme()).toBeFalsy();
-        expect(thirdDriver.hasDarkTheme()).toBeFalsy();
-        expect(thirdDriver.hasLightTheme()).toBeTruthy();
-        expect(thirdDriver.hasAnimationClass()).toBeFalsy();
-        expect(thirdDriver.hasArrow()).toBeFalsy();
+        expect(await thirdDriver.hasErrorTheme()).toBe(false);
+        expect(await thirdDriver.hasDarkTheme()).toBe(false);
+        expect(await thirdDriver.hasLightTheme()).toBe(true);
+        expect(await thirdDriver.hasAnimationClass()).toBe(false);
+        expect(await thirdDriver.hasArrow()).toBe(false);
       });
     });
 
@@ -709,11 +680,9 @@ describe('Tooltip', () => {
           </Tooltip>,
         );
         driver.mouseEnter();
-        await eventually(async () =>
-          expect(await driver.isShown()).toBeTruthy(),
-        );
+        await eventually(async () => expect(await driver.isShown()).toBe(true));
         cleanup();
-        expect(await driver.isShown()).toBeFalsy();
+        expect(await driver.isShown()).toBe(false);
       });
 
       it('should have fadeIn class and delay when showImmediately is unspecified', async () => {
@@ -724,7 +693,7 @@ describe('Tooltip', () => {
         );
         driver.mouseEnter();
         return resolveIn(30).then(async () => {
-          expect(await driver.hasAnimationClass()).toBeTruthy();
+          expect(await driver.hasAnimationClass()).toBe(true);
         });
       });
 
@@ -740,7 +709,7 @@ describe('Tooltip', () => {
         );
         driver.mouseEnter();
         return resolveIn(30).then(async () => {
-          expect(await driver.hasAnimationClass()).toBeTruthy();
+          expect(await driver.hasAnimationClass()).toBe(true);
         });
       });
 
@@ -751,14 +720,14 @@ describe('Tooltip', () => {
           </Tooltip>,
         );
         driver.mouseEnter();
-        expect(await driver.hasAnimationClass()).toBeFalsy();
+        expect(await driver.hasAnimationClass()).toBe(false);
       });
     });
 
     describe('assertExistsWrapper', () => {
       it('should return exists false', async () => {
         const { driver } = tooltipDriverFactory({ element: null });
-        expect(await driver.exists()).toBeFalsy();
+        expect(await driver.exists()).toBe(false);
       });
 
       it('should throw error', async () => {
