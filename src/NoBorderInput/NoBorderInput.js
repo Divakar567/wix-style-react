@@ -7,10 +7,10 @@ import inputStyles from '../Input/Input.scss';
 import styles from './NoBorderInput.scss';
 
 class NoBorderInput extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
-      focus: false,
+      focus: props.autoFocus ? true : false,
     };
   }
 
@@ -21,6 +21,8 @@ class NoBorderInput extends React.Component {
       dataHook,
       title,
       disabled,
+      onFocus,
+      onBlur,
       status,
       statusMessage,
       className,
@@ -78,8 +80,18 @@ class NoBorderInput extends React.Component {
           className={styles.nbinput}
           {...wsrInputProps}
           ref={wsrInput => (this.wsrInput = wsrInput)}
-          onFocus={() => this.setState({ focus: true })}
-          onBlur={() => this.setState({ focus: false })}
+          onFocus={e => {
+            this.setState({ focus: true });
+            if (typeof onFocus === 'function') {
+              onFocus(e);
+            }
+          }}
+          onBlur={e => {
+            this.setState({ focus: false });
+            if (typeof onBlur === 'function') {
+              onBlur(e);
+            }
+          }}
         />
         <div
           className={classNames(

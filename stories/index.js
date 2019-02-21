@@ -27,7 +27,7 @@ import './AddItem/AddItem.story'; // 2.8 AddItem
 // 3. Inputs
 import './TextInput/index.story'; // 3.1. Text Input
 import './TextArea/index.story'; // 3.2 Text Area
-import './RichTextArea/RichTextArea.story.js'; // 3.2b + RichTextArea
+import './RichTextArea/index.story.js'; // 3.2b + RichTextArea
 import './FieldWithSelectionComposite'; // 3.3 Field With Selection
 import './TimeInput/TimeInput.story.js'; // 3.4 TimeInput
 import './DatePicker.story.js'; // 3.6 DatePicker
@@ -128,6 +128,7 @@ import './components/MultiSelect/index.story';
 import './components/Page/PageExampleStories.js';
 import './components/PageHeader/index.story.js';
 import './Proportion/index.story.js';
+import './RichTextArea/api.story';
 import './Skeleton.story.js';
 import './Text/index.story';
 import './Thumbnail/index.story';
@@ -167,6 +168,7 @@ import './StatsWidget/testStory'; // 2.7 StatsWidget
 import './SegmentedToggle/testStory'; // 4.5 SegmentedToggle
 import './FloatingNotification/FloatingNotificationTestStory'; // 8.2 FloatingNotification
 import './FormField/testStory';
+import './RichTextArea/testStory';
 
 // The generated test component
 import './GeneratedTestComponent/index.story';

@@ -2,6 +2,7 @@ import React from 'react';
 import { storySettings } from './storySettings';
 import { baseScope } from '../utils/Components/LiveCodeExample';
 import {
+  header,
   description,
   table,
   importExample,
@@ -10,6 +11,9 @@ import {
 } from 'wix-storybook-utils/Sections';
 import LinkTo from '@storybook/addon-links/react';
 import * as examples from './examples';
+
+import Input from 'wix-style-react/Input';
+import FormField from 'wix-style-react/FormField';
 
 const code = config =>
   baseCode({ components: baseScope, compact: true, ...config });
@@ -24,12 +28,24 @@ export default {
   storyName: storySettings.storyName,
 
   sections: [
+    header({
+      component: (
+        <div style={{ width: '50%' }}>
+          <FormField label="Text Input">
+            <Input placeholder="Placeholder" />
+          </FormField>
+        </div>
+      ),
+
+      issueUrl: 'https://github.com/wix/wix-style-react/issues/new',
+    }),
+
     columns({
       items: [
         description({
+          title: 'Description',
           text: `Text Input is a composition of 2 individual components – &lt;FormField/&gt; and &lt;Input /&gt;. This composition is used to build various forms.`,
         }),
-        description(),
       ],
     }),
 
@@ -51,7 +67,6 @@ export default {
             ],
           ],
         }),
-        description(),
       ],
     }),
 
@@ -60,7 +75,6 @@ export default {
         importExample({
           source: examples.importExample,
         }),
-        description(),
       ],
     }),
 
