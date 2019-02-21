@@ -1,7 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
 import omit from 'omit';
-
+import PropTypes from 'prop-types';
 import Input from '../Input/Input';
 import inputStyles from '../Input/Input.scss';
 import styles from './NoBorderInput.scss';
@@ -19,7 +19,7 @@ class NoBorderInput extends React.Component {
       id,
       size,
       dataHook,
-      title,
+      label,
       disabled,
       onFocus,
       onBlur,
@@ -51,6 +51,7 @@ class NoBorderInput extends React.Component {
       [styles.hasError]: status === Input.StatusError,
       [styles.hasFocus]: this.state.focus,
       [styles.hasValue]: hasValue,
+      [styles.noLabel]: !label,
     };
     const statusClass = status && statusMessage ? styles.errorMessage : '';
     const statusText = status && statusMessage;
@@ -73,7 +74,7 @@ class NoBorderInput extends React.Component {
         data-hook={dataHook}
       >
         <label className={styles.label} htmlFor={id}>
-          {title}
+          {label}
         </label>
         <Input
           className={styles.nbinput}
@@ -115,6 +116,8 @@ NoBorderInput.defaultProps = {
 };
 
 NoBorderInput.propTypes = {
+  /** The label displayed above the input when focused and as the input text when there is none */
+  label: PropTypes.string,
   ...Input.propTypes,
 };
 
