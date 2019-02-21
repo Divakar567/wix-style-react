@@ -6,8 +6,9 @@ const rm = require('rimraf');
 const mkdirp = require('mkdirp');
 const transpileSrc = require('./transpileSrc');
 
-const STEP_WIDTH = 5;
-const STEPS = 5;
+const STEPS = 4;
+const TOTAL_STEPS_WIDTH = 20;
+const STEP_WIDTH = TOTAL_STEPS_WIDTH / STEPS;
 const options = { stdio: 'pipe', env: { FORCE_COLOR: true } };
 const startTime = new Date();
 const progress = new ProgressBar(
@@ -44,14 +45,13 @@ cleanDist();
 
 const testkit = transpileAndCopyFiles('testkit');
 const test = transpileAndCopyFiles('test');
-const stories = transpileAndCopyFiles('stories');
 const src = transpileSrc().then(() => {
   progress.tick(STEP_WIDTH, {
     dir: 'src',
   });
 });
 
-Promise.all([testkit, test, stories, src])
+Promise.all([testkit, test, src])
   .then(() => {
     console.log(`🚀 Done in ${Math.round(new Date() - startTime) / 1000}s`);
   })

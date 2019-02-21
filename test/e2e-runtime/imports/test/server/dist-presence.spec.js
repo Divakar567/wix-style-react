@@ -1,5 +1,4 @@
 const formatErrorMessage = message => {
-  console.log(message);
   return `Module ${message.match(/dist(\w|\/)+/)[0]} not found`
 };
 
@@ -23,16 +22,6 @@ describe('test utils', () => {
   it('load test utils files', async () => {
     try {
       require('../../../../../dist/test/utils')
-    } catch (e) {
-      throwIfNotFound(e)
-    }
-  });
-});
-
-describe('stories', () => {
-  it('load test utils files', async () => {
-    try {
-      require('../../../../../dist/stories')
     } catch (e) {
       throwIfNotFound(e)
     }
