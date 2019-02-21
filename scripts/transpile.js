@@ -6,10 +6,10 @@ const rm = require('rimraf');
 const mkdirp = require('mkdirp');
 const transpileSrc = require('./transpileSrc');
 
-const STEP_WIDTH = 9;
-const STEPS = 4;
+const STEP_WIDTH = 5;
+const STEPS = 5;
 const options = { stdio: 'pipe', env: { FORCE_COLOR: true } };
-
+const startTime = new Date();
 const progress = new ProgressBar(
   'Transpiling `src` -> `dist` :bar :percent :dir',
   {
@@ -17,50 +17,34 @@ const progress = new ProgressBar(
   },
 );
 
-const startTime = new Date();
-
-rm.sync('./dist');
-mkdirp.sync('./dist');
-
-const testkit = execa
-  .shell(
-    'babel testkit --out-dir dist/testkit --copy-files --plugins=@babel/plugin-transform-modules-commonjs',
-    {
-      ...options,
-    },
-  )
-  .then(() => {
-    progress.tick(STEP_WIDTH, {
-      dir: 'testkit',
-    });
+const cleanDist = () => {
+  rm.sync('./dist');
+  mkdirp.sync('./dist');
+  progress.tick(STEP_WIDTH, {
+    dir: 'dist',
   });
+};
 
-const test = execa
-  .shell(
-    'babel test --out-dir dist/test --copy-files --plugins=@babel/plugin-transform-modules-commonjs',
-    {
-      ...options,
-    },
-  )
-  .then(() => {
-    progress.tick(STEP_WIDTH, {
-      dir: 'test',
+const transpileAndCopyFiles = name => {
+  return execa
+    .shell(
+      `babel ${name} --out-dir dist/${name} --copy-files --plugins=@babel/plugin-transform-modules-commonjs`,
+      {
+        ...options,
+      },
+    )
+    .then(() => {
+      progress.tick(STEP_WIDTH, {
+        dir: name,
+      });
     });
-  });
+};
 
-const stories = execa
-  .shell(
-    'babel stories --out-dir dist/stories --copy-files --plugins=@babel/plugin-transform-modules-commonjs',
-    {
-      ...options,
-    },
-  )
-  .then(() => {
-    progress.tick(STEP_WIDTH, {
-      dir: 'stories',
-    });
-  });
+cleanDist();
 
+const testkit = transpileAndCopyFiles('testkit');
+const test = transpileAndCopyFiles('test');
+const stories = transpileAndCopyFiles('stories');
 const src = transpileSrc().then(() => {
   progress.tick(STEP_WIDTH, {
     dir: 'src',

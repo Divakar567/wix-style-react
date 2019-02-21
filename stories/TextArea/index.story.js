@@ -2,18 +2,23 @@ import React from 'react';
 import { storySettings } from './storySettings';
 import { baseScope } from '../utils/Components/LiveCodeExample';
 import {
+  header,
   description,
   table,
   importExample,
   columns,
-  liveCode as baseCode,
+  code as baseCode,
 } from 'wix-storybook-utils/Sections';
 import LinkTo from '@storybook/addon-links/react';
 import * as examples from './examples';
 
-const liveCode = config =>
+import InputArea from 'wix-style-react/InputArea';
+import FormField from 'wix-style-react/FormField';
+
+const code = config =>
   baseCode({
-    components: { ...baseScope },
+    components: baseScope,
+    compact: true,
     ...config,
   });
 
@@ -22,12 +27,23 @@ export default {
   storyName: storySettings.storyName,
 
   sections: [
+    header({
+      component: (
+        <div style={{ width: '50%' }}>
+          <FormField label="Text Area">
+            <InputArea placeholder="Placeholder" />
+          </FormField>
+        </div>
+      ),
+
+      issueUrl: 'https://github.com/wix/wix-style-react/issues/new',
+    }),
+
     columns({
       items: [
         description({
           text: 'A text area can be used to allow for extended user input.',
         }),
-        description(),
       ],
     }),
 
@@ -52,7 +68,6 @@ export default {
             ],
           ],
         }),
-        description(),
       ],
     }),
 
@@ -70,7 +85,7 @@ export default {
           title: 'Plain Example',
           text: 'Default text area setup.',
         }),
-        liveCode({ compact: true, source: examples.basicExample }),
+        code({ source: examples.basicExample }),
       ],
     }),
 
@@ -81,7 +96,7 @@ export default {
           text:
             'This component allows to limit number of characters can be inserted.',
         }),
-        liveCode({ compact: true, source: examples.charLimitExample }),
+        code({ source: examples.charLimitExample }),
       ],
     }),
 
@@ -91,7 +106,7 @@ export default {
           title: 'Resizable Height',
           text: 'It is allowed to make text area resizable.',
         }),
-        liveCode({ compact: true, source: examples.resizableHeightExample }),
+        code({ source: examples.resizableHeightExample }),
       ],
     }),
 
@@ -101,7 +116,7 @@ export default {
           title: 'Label Position',
           text: `Text Area's label can be position on top, left or can be hidden. Additional properties behave accordingly.`,
         }),
-        liveCode({ compact: true, source: examples.positionExample }),
+        code({ source: examples.positionExample }),
       ],
     }),
   ],

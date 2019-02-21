@@ -14,6 +14,10 @@ Types of changes:
 1. **Docs** for documentation changes
 1. **Lab** components and features that are still in a work in progress
 
+## next
+### Fixed
+- infra: avoid dynamic require in testkit/index.js & testkit/enzyme.js [#3000](https://github.com/wix/wix-style-react/pull/3000)
+
 ## 6.5.1 - 2019-02-20
 ### Fixed
 - infra: transpile test directory [#3004](https://github.com/wix/wix-style-react/pull/3004)
@@ -43,12 +47,12 @@ Types of changes:
 ### Changed
 - infra: improve build process. Migrate to `babel@7` [#2868](https://github.com/wix/wix-style-react/pull/2868)
 
-### Labe
+### Lab
 - `<NoBorderInput/>` - add new component [#2948](https://github.com/wix/wix-style-react/pull/2948)
 
 ### Deprecated
 
-- `<RichTextAreaComposite />` - deprecated component, you should use a composition of <RichTextArea/> and <FormField/> [#2997](https://github.com/wix/wix-style-react/pull/2997)
+- `<RichTextAreaComposite />` - deprecated component, you should use a composition of `<RichTextArea/>` and `<FormField/>` [#2997](https://github.com/wix/wix-style-react/pull/2997)
 
 ## 6.4.0 - 2019-02-18
 

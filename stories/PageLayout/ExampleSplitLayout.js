@@ -4,13 +4,37 @@ import Page from 'wix-style-react/Page';
 import Button from 'wix-style-react/Button';
 import Card from 'wix-style-react/Card';
 
+import Box from 'wix-style-react/Box';
+import PopoverMenu from 'wix-style-react/PopoverMenu';
+import PopoverMenuItem from 'wix-style-react/PopoverMenuItem';
 import { Breadcrumbs } from 'wix-style-react/Breadcrumbs';
 import { Row, Col, Container } from 'wix-style-react/Grid';
 
 class ExampleSplitLayout extends React.Component {
   renderHeader() {
     const ActionBar = () => {
-      return <Button>Save</Button>;
+      return (
+        <Box>
+          <Box>
+            <PopoverMenu
+              buttonTheme="icon-greybackground"
+              placement="bottom"
+              size="normal"
+              appendToParent
+              zIndex={1}
+            >
+              <PopoverMenuItem onClick={() => {}} text="Refresh" />
+              <PopoverMenuItem onClick={() => {}} text="Trash" />
+            </PopoverMenu>
+          </Box>
+          <Box marginLeft="small" marginRight="small">
+            <Button skin="light">Cancel</Button>
+          </Box>
+          <Box>
+            <Button>Save</Button>
+          </Box>
+        </Box>
+      );
     };
 
     return (
