@@ -107,7 +107,7 @@ class NoBorderInput extends React.Component {
 NoBorderInput.displayName = 'NoBorderInput';
 
 NoBorderInput.defaultProps = {
-  autoSelect: false,
+  autoSelect: true,
   size: 'normal',
   statusMessage: '',
   textOverflow: 'clip',
